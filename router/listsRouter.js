@@ -1,8 +1,10 @@
 const express = require('express')
 const router = express.Router()
+const test = require('../middleware/practice.js')
+
+router.use(test)
 
 const knex = require('./knexConnection')
-
 router.get('/', async (req, res) => {
     try {
         const values = await knex.select().from('lists')
