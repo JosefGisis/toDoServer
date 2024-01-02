@@ -1,0 +1,51 @@
+-- @block
+CREATE TABLE users(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(255) NOT NULL UNIQUE, 
+    username VARCHAR(20) NOT NULL UNIQUE,
+    pass_word TEXT NOT NULL,
+    creation_date DATE DEFAULT(CURRENT_DATE)
+);
+
+-- @block
+CREATE TABLE lists(
+    id INT AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL UNIQUE,
+    list_description TEXT,
+    creation_date DATE DEFAULT(CURRENT_DATE), 
+    users_id INT, 
+    PRIMARY KEY (id),
+    FOREIGN KEY (users_id) REFERENCES users(id)
+);
+
+-- @block
+ALTER TABLE lists ADD COLUMN active BOOLEAN NOT NULL DEFAULT(false);
+
+-- @block
+CREATE TRIGGER before_list_update
+BEFORE UPDATE ON to_dos
+FOR EACH ROW 
+BEGIN
+    IF NEW.active = true THEN
+        UPDATE lists SET ACTIVE = false WHERE users_id = NEW.users_id AND ID != NEW.id
+    END IF;
+END;
+
+
+
+-- @block
+CREATE TABLE to_dos(
+    id INT AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL UNIQUE,
+    creation_date DATE DEFAULT(CURRENT_DATE),
+    completed BOOLEAN DEFAULT FALSE,
+    due_date DATE,
+    PRIMARY KEY (id),
+    membership INT,
+    users_id INT,
+    FOREIGN KEY (membership) REFERENCES lists(id),
+    FOREIGN KEY (users_id) REFERENCES users(id)
+);
+
+
+

@@ -1,0 +1,104 @@
+-- comments in mysql start with two dashes (similar to YAML)
+-- vs code mysql tools use @ to execute a block of SQL
+-- @block
+-- sql convention to write keywords in all capitals
+-- to_do_app db already exists 
+-- all statements end with a semi-colon
+CREATE DATABASE to_do_app; 
+CREATE TABLE users;
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(255) NOT NULL UNIQUE, 
+    username VARCHAR(20) NOT NULL UNIQUE,
+    pass_word TEXT NOT NULL, 
+);
+
+-- @block
+-- lets add some entries into users
+INSERT INTO users (email, username, pass_word)
+VALUES (
+    'jsquared.gisis@gmail.com',
+    'Josef Gisis',
+    'somerandopassword'
+);
+
+-- @block
+-- let's retrieve some data
+-- select asterisk will return all COLUMNS from users table
+SELECT * FROM users;
+-- Here we can control which columns are returned
+SELECT id, email, username FROM users
+
+-- lets retrieve a particular entry
+WHERE username = 'Josef Gisis'
+AND id > 1
+OR id > 1
+AND username LIKE 'J%' -- returns entries where username contains J
+
+-- we can filter are results with: 
+ORDER BY id ASC
+LIMIT 4;
+
+-- filtering slows down how we retrieve data, so we can create an index that
+-- speeds the process up, but does come at the expense of slower write times
+-- and more memory
+-- @block
+CREATE INDEX email_index ON users(email);
+
+-- Let's create a table for our first table to relate to
+-- We can retrieve and create data as we have done earlier
+-- @block
+CREATE TABLE lists(
+    id INT AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL UNIQUE,
+    list_description TEXT,
+    creation_date DATE NOT NULL, 
+    PRIMARY KEY (id),
+    -- foreign key creates data integrity because a user cannot be deleted so long as he has created lists
+    FOREIGN KEY (users_id) REFERENCES users(id)
+);
+
+-- now we can create a join. There are four kinds of joins: left, right, inner, and outer.
+-- in this case inner returns all entries from the left table that has a corresponding entry
+-- in the lists tables. If there we not such links, nothing would be returned.
+SELECT * FROM users
+INNER JOIN lists
+ON lists.users_id = users.id;
+
+-- Left join takes all the entries from users and only returns lists that have a
+-- link to users. right join does the opposite
+SELECT * FROM users
+LEFT JOIN lists 
+ON lists.users_id = users.id;
+
+SELECT * FROM users 
+RIGHT JOIN lists  
+ON lists.users_id = users.id;
+
+-- mysql does not have an outer join but it would return both tables in their entirety
+-- and display all the connections but in SQL it looks LIKe
+SELECT * FROM users
+FULL OUTER JOIN lists   
+ON lists.users_id = users.id;
+
+-- in the case of an outer join, where the columns do not share names they will
+-- be automatically renamed. To provide names in this scenario, we can use:
+-- @block
+SELECT
+    users.id AS user_id,
+    rooms.id AS room_id, COMMENT
+    email
+FROM users_id
+INNER JOIN lists ON lists.user_id = users.id;
+
+-- let's create a todo table
+-- @block
+CREATE TABLE to_dos(
+    id INT AUTO_INCREMENT,
+    title TEXT NOT NULL,
+    creation_date DATE NOT NULL,
+    completed BOOLEAN NOT NULL,
+    due_date DATE,
+    PRIMARY KEY (id),
+    FOREIGN KEY (membership) REFERENCES lists(id),
+    FOREIGN KEY (users_id) REFERENCES users(id)
+);

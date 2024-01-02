@@ -1,0 +1,9 @@
+[
+    {"id": 0, "title": "get milk", "completed": 0},
+    {"id": 1, "title": "get bread", "completed": 0},
+    {"id": 2, "title": "get oil", "completed": 1},
+    {"id": 3, "title": "get cream", "completed": 0},
+    {"id": 4, "title": "get spices", "completed": 1},
+    {"id": 5, "title": "get nachos", "completed": 0},
+    {"id": 6, "title": "get cheese", "completed": 1}
+]
