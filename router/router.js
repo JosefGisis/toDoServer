@@ -13,8 +13,8 @@ const app = express()
 const users = require('./usersRouter.js')
 const lists = require('./listsRouter.js')
 const toDos = require('./toDosRouter.js')
-
-app.set('view engine', 'pug')
+const register = require('./registerRouter.js')
+const login = require('./loginRouter.js')
 
 app.use(express.json())
 app.use(cors())
@@ -23,15 +23,8 @@ app.use(morgan('short'))
 app.use('/api/users', users)
 app.use('/api/lists', lists)
 app.use('/api/to_dos', toDos)
-
-app.get('/', async (req, res) => {
-    try {
-        res.render('index', {title: 'hello there', message: 'hello there'})
-    } catch (err) {
-        console.error('error getting active list', err)
-        res.status(500).send('internal server error')
-    }
-})
+app.use('/api/register', register)
+app.use('/api/login', login)
 
 const port = 3000
 

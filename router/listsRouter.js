@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const test = require('../middleware/practice.js')
+const authorization = require('../middleware/authorization.js')
 
-router.use(test)
+router.use(authorization)
 
 const knex = require('./knexConnection')
 router.get('/', async (req, res) => {

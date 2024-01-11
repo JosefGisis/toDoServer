@@ -1,5 +1,6 @@
 {
     "user": "TO_DO_DB_USER",
     "password": "TO_DO_DB_PASSWORD",
-    "database": "TO_DO_DB_NAME"
+    "database": "TO_DO_DB_NAME",
+    "JWTtoken": "JWT_TOKEN"
 }
