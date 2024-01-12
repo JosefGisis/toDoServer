@@ -3,7 +3,7 @@ require('dotenv').config()
 const cors = require('cors')
 const helmet = require('helmet')
 const morgan = require('morgan')
-const Joi = require('joi')
+// const Joi = require('joi')
 const config = require('config')
 
 console.log(config.get('name'))
@@ -25,6 +25,8 @@ app.use('/api/lists', lists)
 app.use('/api/to_dos', toDos)
 app.use('/api/register', register)
 app.use('/api/login', login)
+
+
 
 const port = 3000
 
