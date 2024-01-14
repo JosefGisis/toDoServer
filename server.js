@@ -17,8 +17,8 @@ app.use(cors())
 app.use(helmet())
 app.use(morgan('short'))
 
-app.use('/1', v1)
+app.use('api/1', v1)
 
-app.use((err,req,res)=>{
+app.use((err, req, res)=>{
     res.status(500).send('Something broke!'+err.message)
 })

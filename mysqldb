@@ -19,7 +19,7 @@ CREATE TABLE lists(
 );
 
 -- @block
-ALTER TABLE lists ADD COLUMN active BOOLEAN NOT NULL DEFAULT(false);
+ALTER TABLE lists DROP COLUMN active;
 
 -- @block
 CREATE TRIGGER before_list_update
