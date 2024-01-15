@@ -21,7 +21,6 @@ CREATE TABLE lists(
 -- @block
 ALTER TABLE to_dos ADD COLUMN last_modified DATE DEFAULT(CURRENT_DATE);
 
-
 -- @block
 CREATE TABLE to_dos(
     id INT AUTO_INCREMENT,

@@ -2,7 +2,6 @@ const express = require('express')
 const knex = require('./knexConnection')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const config = require('config')
 
 const router = express.Router()
 

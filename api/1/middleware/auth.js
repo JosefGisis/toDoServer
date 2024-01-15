@@ -1,11 +1,29 @@
-module.exports.authenticate = function (req, res, next) {
-    req.body.authInfo = { users_id: 1}
-    
-    // const isValid = ''//validate request
-    // // If invalid 
-    // if(!isValid) return res.status(401).send()
-    
-    // // validate JWT & add decoded values to req.authInfo
+const passport = require('passport')
+const JWTstrategy = require('passport-jwt').Strategy
+const ExtractJWT = require('passport-jwt').ExtractJwt
 
-    next()
+passport.use(
+	new JWTstrategy(
+		{
+			secretOrKey: process.env.JWT_KEY,
+			jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+		},
+		async (payload, done) => {
+			const userId = payload.id
+			done(null, userId)
+		}
+	)
+)
+
+module.exports.authenticate = function (req, res, next) {
+	passport.authenticate('jwt', { session: false }, (err, userId) => {
+		if (err) return res.status(401).json({status: 401, message: 'invalid authorization', data: null})
+
+		if (!userId) return res.status(401).json({status: 401, message: 'invalid authorization', data: null })
+        
+        req.body.authInfo = {users_id: userId}
+
+		next()
+	})(req, res, next)
 }
+
