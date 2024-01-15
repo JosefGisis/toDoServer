@@ -4,7 +4,7 @@ const authorization = require('../middleware/authorization.js')
 
 router.use(authorization)
 
-const knex = require('./knexConnection')
+const knex = require('./knexConnection.js')
 router.get('/', async (req, res) => {
     try {
         const values = await knex.select().from('lists')
