@@ -19,18 +19,7 @@ CREATE TABLE lists(
 );
 
 -- @block
-ALTER TABLE lists DROP COLUMN active;
-
--- @block
-CREATE TRIGGER before_list_update
-BEFORE UPDATE ON to_dos
-FOR EACH ROW 
-BEGIN
-    IF NEW.active = true THEN
-        UPDATE lists SET ACTIVE = false WHERE users_id = NEW.users_id AND ID != NEW.id
-    END IF;
-END;
-
+ALTER TABLE to_dos ADD COLUMN last_modified DATE DEFAULT(CURRENT_DATE);
 
 
 -- @block
@@ -46,6 +35,3 @@ CREATE TABLE to_dos(
     FOREIGN KEY (membership) REFERENCES lists(id),
     FOREIGN KEY (users_id) REFERENCES users(id)
 );
-
-
-

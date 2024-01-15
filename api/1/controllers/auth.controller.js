@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 
 const saltRounds = 10
 
-exports.login = async function (req, res) {
+module.exports.login = async function (req, res, next) {
 	const { username, password } = req.body
 	if (!username || !password) return res.status(400).json({status: 400, message: 'bad request', data: null})
 
@@ -17,13 +17,14 @@ exports.login = async function (req, res) {
 
 		const token = jwt.sign({id: user[0].id}, process.env.JWT_KEY)
 		res.json({status: 200, message: 'login successful', token})
+        next()
 	} catch (err) {
 		console.log(err)
 		res.status(500).json({status: 500, message: 'internal server error', data: null})
 	}
 }
 
-exports.register = async function (req, res) {
+module.exports.register = async function (req, res, next) {
 	const { username, email, password } = req.body
 	if (!username || !email || !password) return res.status(400).json({status: 400, message: 'bad request', data: null})
 
@@ -39,6 +40,7 @@ exports.register = async function (req, res) {
 
 		const token = jwt.sign({id: newUser[0].id}, process.env.JWT_KEY)
 		res.json({status: 200, message: 'account created', token})
+        next()
 	} catch (err) {
 		console.error(err)
 		res.status(500).json({status: 500, message: 'internal server error', data: null})

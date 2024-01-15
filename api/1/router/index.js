@@ -15,4 +15,4 @@ router.use('/to-dos', authenticate, toDosRouter)
 
 router.use('/profile', authenticate, profileRouter)
 
-exports = router
+module.exports = router

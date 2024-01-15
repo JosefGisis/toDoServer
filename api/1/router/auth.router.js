@@ -5,4 +5,4 @@ router.post('/login', controller.login)
 
 router.post('/register', controller.register)
 
-exports = router
+module.exports = router

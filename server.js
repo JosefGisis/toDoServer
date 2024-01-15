@@ -16,9 +16,10 @@ app.use(express.json())
 app.use(cors())
 app.use(helmet())
 app.use(morgan('short'))
+app.use('/api/1', v1)
 
-app.use('api/1', v1)
+const port = 3000
 
-app.use((err, req, res)=>{
-    res.status(500).send('Something broke!'+err.message)
+app.listen(port, () => {
+    console.log(`server is running on port ${port}`)
 })

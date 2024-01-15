@@ -11,4 +11,4 @@ router.delete('/:listId', controller.deleteList)
 
 router.put('/:listId', controller.putList)
 
-exports = router
+module.exports = router

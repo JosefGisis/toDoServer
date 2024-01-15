@@ -1,97 +1,73 @@
 const knex = require('../../../knexConnection.js')
 
-exports.toDos = async function (req, res) {
+module.exports.toDos = async function (req, res, next) {
 	try {
-		const {
-			authInfo: { users_Id },
-		} = req
-
-		const toDos = await knex('to_dos').where('users_Id', users_Id)
+		const toDos = await knex('to_dos').where('users_id', req.body.authInfo.users_id)
 
 		res.send({ data: toDos })
+		next()
 	} catch (err) {
 		console.error(err)
-		res.status(500).json('error performing request. Please try again soon')
+		res.status(500).json({status: 500, message: 'error performing request. Please try again soon', data: null})
 	}
 }
 
-exports.toDo = async function (req, res) {
+module.exports.toDo = async function (req, res, next) {
 	try {
-		const {
-			authInfo: { users_Id },
-			params: { id },
-		} = req
-
-		const toDo = await knex('to_dos').where('users_Id', users_Id).andWhere('membership', id)
+		const toDo = await knex('to_dos').where('users_id', req.body.authInfo.users_id).andWhere('membership', req.params.toDoId)
 
 		res.send({ data: toDo })
+		next()
 	} catch (err) {
 		console.error(err)
-		res.status(500).json('error performing request. Please try again soon')
+		res.status(500).json({status: 500, message: 'error performing request. Please try again soon', data: null})
 	}
 }
 
-exports.postToDo = async function (req, res) {
+module.exports.postToDo = async function (req, res, next) {
 	try {
-		const {
-			authInfo: { users_Id },
-			body: { title, due_date, membership },
-		} = req
-
-		const postedToDo = await knex('to_dos').insert({ users_Id: users_Id, title: title, due_date: due_date, membership: membership })
+		const postedToDo = await knex('to_dos').insert({ users_id: req.body.authInfo.users_id, title: req.body.title, due_date: req.body.due_date, membership: req.body.membership })
 
 		res.send({ data: postedToDo })
+		next()
 	} catch (err) {
 		console.error(err)
-		res.status(500).send('internal server error')
+		res.status(500).json({status: 500, message: 'error performing request. Please try again soon', data: null})
 	}
 }
 
-exports.deleteToDo = async function (req, res) {
+module.exports.deleteToDo = async function (req, res, next) {
 	try {
-		const {
-			authInfo: { users_Id },
-			params: { id },
-		} = req
-
-		const deletedToDo = await knex('to_dos').where('users_Id', users_Id).andWhere('id', id).del()
+		const deletedToDo = await knex('to_dos').where('users_id', req.body.authInfo.users_id).andWhere('toDoId', req.params.toDoId).del()
 
 		res.send({ data: deletedToDo })
+		next()
 	} catch (err) {
 		console.error(err)
-		res.status(500).send('internal server error')
+		res.status(500).json({status: 500, message: 'error performing request. Please try again soon', data: null})
 	}
 }
 
-exports.deleteToDos = async function (req, res) {
+module.exports.deleteToDos = async function (req, res, next) {
 	try {
-		const {
-			authInfo: { users_Id },
-			params: { membership },
-		} = req
-
-		const deletedToDos = await knex('to_dos').where('users_Id', users_Id).andWhere('membership', membership).del()
+		const deletedToDos = await knex('to_dos').where('users_id', req.body.authInfo.users_id).andWhere('membership', req.body.membership).del()
 
 		res.send({ data: deletedToDos })
+		next()
 	} catch (err) {
 		console.error(err)
-		res.status(500).send('internal server error')
+		res.status(500).json({status: 500, message: 'error performing request. Please try again soon', data: null})
 	}
 }
 
-exports.putList = async function (req, res) {
+module.exports.putToDo = async function (req, res, next) {
 	try {
-		const {
-			authInfo: { users_Id },
-			params: { id },
-			body: { title, due_date },
-		} = req
-
-		const putToDo = await knex('to_dos').where('users_Id', users_Id).andWhere('membership', id).update({title: title, due_date: due_date})
+		const putToDo = await knex('to_dos').where('users_id', req.body.authInfo.users_id).andWhere('membership', req.params.toDoId).update({title: req.body.title, due_date: req.body.due_date})
 
 		res.send({ data: putToDo })
+		next()
 	} catch (err) {
 		console.error(err)
-		res.status(500).send('internal server error')
+		res.status(500).json({status: 500, message: 'error performing request. Please try again soon', data: null})
 	}
 }

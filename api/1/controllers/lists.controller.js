@@ -1,81 +1,75 @@
 const knex = require('../../../knexConnection.js')
 
-exports.lists = async function (req, res) {
+module.exports.lists = async function (req, res, next) {
 	try {
-		const {
-			authInfo: { users_Id },
-		} = req
+		const lists = await knex('lists').where('users_id', req.body.authInfo.users_id)
 
-		const lists = await knex('lists').where('users_Id', users_Id)
+		if (!lists.length) return res.status(200).json({status:200, message: 'no lists found', data: null})
+        
+		res.json({status: 200, message: '', data: lists})
+		next()
+	} catch (err) {
+		console.error(err)
+		res.status(500).json({status: 500, message: 'error performing request. Please try again soon', data: null})
+	}
+}
+
+module.exports.list = async function (req, res, next) {
+	try {
+		const list = await knex('lists').where('id', req.params.listId)
+
+		if (!list.length) return res.status(400).json({status: 400, message: 'error getting list', data: null})
 		
-        res.send({ data: lists })
+        res.json({status: 200, message: '', data: list})
+		next()
 	} catch (err) {
 		console.error(err)
-		res.status(500).json('error performing request. Please try again soon')
+		res.status(500).json({status: 500, message: 'error performing request. Please try again soon', data: null})
 	}
 }
 
-exports.list = async function (req, res) {
+module.exports.postList = async function (req, res, next) {
 	try {
-		const {
-			authInfo: { users_Id },
-			params: { id },
-		} = req
+		const { title } = req.body
+		if (!title) return res.status(400).json({status: 400, message: 'list title required', data: null})
 
-		const list = await knex('lists').where('users_Id', users_Id).andWhere('membership', id)
+		// returns the id of the newly created list
+		const listId = await knex('lists').insert({ users_id: req.body.authInfo.users_id, title: req.body.title })
+        
+		res.json({status: 200, message: 'new list posted', data: listId})
+		next()
+	} catch (err) {
+		console.error(err)
+		res.status(500).send({status: 500, message: 'error performing request. Please try again soon', data: null})
+	}
+}
+
+module.exports.deleteList = async function (req, res, next) {
+	try {
+		// returns number of deleted lists
+		const deletedList = await knex('lists').where('id', req.params.listId).del()
 		
-        res.send({ data: list })
-	} catch (err) {
-		console.error(err)
-		res.status(500).json('error performing request. Please try again soon')
-	}
-}
-
-exports.postList = async function (req, res) {
-	try {
-		const {
-			authInfo: { users_Id },
-			body: { title },
-		} = req
-
-		const postedList = await knex('lists').insert({ users_Id: users_Id, title: title })
+		if (!deletedList[0]) return res.status(400).json({status: 400, message: 'error deleting list', data: null})
 		
-        res.send({ data: postedList })
+		res.json({status: 200, message: 'list deleted', data: deletedList})
+		next()
 	} catch (err) {
 		console.error(err)
-		res.status(500).send('internal server error')
+		res.status(500).send({status: 500, message: 'error performing request. Please try again soon', data: null})
 	}
 }
 
-exports.deleteList = async function (req, res) {
+module.exports.putList = async function (req, res, next) {
 	try {
-		const {
-			authInfo: { users_Id },
-			params: { id },
-		} = req
-
-		const deletedList = await knex('lists').where('users_Id', users_Id).andWhere('membership', id).del()
-
-		res.send({ data: deletedList })
+		// returns the number of changed lists
+		const putList = await knex('lists').where('id', req.params.listId).update('title', req.body.title)
+		
+		if (!putList[0]) return res.status(400).json({status: 400, message: 'error putting list', data: null})
+		
+		res.json({status: 200, message: 'list updated', data: putList})
+		next()
 	} catch (err) {
 		console.error(err)
-		res.status(500).send('internal server error')
-	}
-}
-
-exports.putList = async function (req, res) {
-	try {
-		const {
-			authInfo: { users_Id },
-			params: { id },
-			body: { title },
-		} = req
-
-		const putList = await knex('lists').where('users_Id', users_Id).andWhere('membership', id).update('title', title)
-
-		res.send({ data: putList })
-	} catch (err) {
-		console.error(err)
-		res.status(500).send('internal server error')
+		res.status(500).send({status: 500, message: 'error performing request. Please try again soon', data: null})
 	}
 }
