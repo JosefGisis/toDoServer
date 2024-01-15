@@ -1,6 +1,10 @@
 const router = require('express').Router()
 const controller = require('../controllers/lists.controller')
 
+const toDosRouter = require('./toDos.router')
+
+router.use('/:listId/to-dos', toDosRouter)
+
 router.get('/', controller.lists)
 
 router.get('/:listId', controller.list)

@@ -14,6 +14,20 @@ module.exports.lists = async function (req, res, next) {
 	}
 }
 
+module.exports.listToDos = async function (req, res, next) {
+	try {
+		const lists = await knex('to_dos').where('membership', req.params.listId)
+
+		if (!lists.length) return res.status(200).json({status:200, message: 'no lists found', data: null})
+        
+		res.json({status: 200, message: '', data: lists})
+		next()
+	} catch (err) {
+		console.error(err)
+		res.status(500).json({status: 500, message: 'error performing request. Please try again soon', data: null})
+	}
+}
+
 module.exports.list = async function (req, res, next) {
 	try {
 		const list = await knex('lists').where('id', req.params.listId)
