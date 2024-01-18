@@ -26,4 +26,3 @@ module.exports.authenticate = function (req, res, next) {
 		next()
 	})(req, res, next)
 }
-
