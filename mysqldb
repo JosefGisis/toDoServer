@@ -10,7 +10,7 @@ CREATE TABLE users(
 -- @block
 CREATE TABLE lists(
     id INT AUTO_INCREMENT,
-    title VARCHAR(255) NOT NULL UNIQUE,
+    title VARCHAR(255) NOT NULL,
     list_description TEXT,
     creation_date DATE DEFAULT(CURRENT_DATE), 
     users_id INT, 
@@ -18,13 +18,11 @@ CREATE TABLE lists(
     FOREIGN KEY (users_id) REFERENCES users(id)
 );
 
--- @block
-ALTER TABLE to_dos ADD COLUMN last_modified DATE DEFAULT(CURRENT_DATE);
 
 -- @block
 CREATE TABLE to_dos(
     id INT AUTO_INCREMENT,
-    title VARCHAR(255) NOT NULL UNIQUE,
+    title VARCHAR(255) NOT NULL,
     creation_date DATE DEFAULT(CURRENT_DATE),
     completed BOOLEAN DEFAULT FALSE,
     due_date DATE,
@@ -34,3 +32,12 @@ CREATE TABLE to_dos(
     FOREIGN KEY (membership) REFERENCES lists(id),
     FOREIGN KEY (users_id) REFERENCES users(id)
 );
+
+-- @block
+ALTER TABLE to_dos ALTER COLUMN last_modified DATE DEFAULT(CURRENT_DATE);
+
+-- @block
+SHOW INDEXES FROM lists WHERE Column_name='title';
+
+-- @block
+ALTER TABLE lists DROP INDEX title;

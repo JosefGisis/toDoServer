@@ -33,9 +33,6 @@ module.exports.postList = async function (req, res, next) {
 		const { title } = req.body
 		if (!title) return res.status(400).json({status: 400, message: 'list title required', data: null})
 
-		const validTitle = await knex('lists').where('title', title)
-		if (validTitle.length) res.status(400).json({status: 400, message: 'duplicate list title', data: null})
-
 		// returns the id of the newly created list
 		const postedId = await knex('lists').insert({ users_id: req.body.authInfo.users_id, title: req.body.title })
 		if (!postedId[0]) throw new Error('error posting new list')
