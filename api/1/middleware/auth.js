@@ -9,7 +9,9 @@ passport.use(
 			jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
 		},
 		async (payload, done) => {
+			
 			const userId = payload.id
+			if (!userId) return done(new Error('Missing user'))
 			done(null, userId, payload)
 		}
 	)
@@ -18,9 +20,6 @@ passport.use(
 module.exports.authenticate = function (req, res, next) {
 	passport.authenticate('jwt', { session: false }, (err, userId) => {
 		if (err) return res.status(401).json({status: 401, message: 'invalid authorization', data: null})
-
-		if (!userId) return res.status(401).json({status: 401, message: 'invalid authorization', data: null })
-        
         req.body.authInfo = {users_id: userId}
 
 		next()
