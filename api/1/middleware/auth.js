@@ -10,7 +10,7 @@ passport.use(
 		},
 		async (payload, done) => {
 			const userId = payload.id
-			done(null, userId)
+			done(null, userId, payload)
 		}
 	)
 )

@@ -1,6 +1,6 @@
 const knex = require('../../../knexConnection.js')
 
-module.exports.lists = async function (req, res, next) {
+module.exports.lists = async function (req, res) {
 	try {
 		const validUser = await knex('users').where('id', req.body.authInfo.users_id)
 		if (!validUser.length) return res.status(404).json({status: 404, message: 'error performing request', data: null})
@@ -8,7 +8,7 @@ module.exports.lists = async function (req, res, next) {
 		const lists = await knex('lists').where('users_id', req.body.authInfo.users_id)
         
 		res.json({status: 200, message: '', data: lists})
-		next()
+		// next()
 	} catch (err) {
 		console.error(err)
 		res.status(500).json({status: 500, message: 'error performing request. Please try again soon', data: null})
