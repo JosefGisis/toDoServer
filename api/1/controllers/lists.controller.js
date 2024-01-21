@@ -4,7 +4,8 @@ const database = require('../../../services/database')
 module.exports.lists = async function (req, res) {
 	try {
 		// database.lists.list(userId, {sort:})
-		const lists = await knex('lists').where('users_id', req.body.authInfo.users_id)
+		console.log(req.authInfo.users_id)
+		const lists = await knex('lists').where('users_id', req.authInfo.users_id)
         
 		res.json({status: 200, message: '', data: lists})
 		// next()
@@ -33,7 +34,7 @@ module.exports.postList = async function (req, res, next) {
 		if (!title) return res.status(400).json({status: 400, message: 'list title required', data: null})
 
 		// returns the id of the newly created list
-		const postedId = await knex('lists').insert({ users_id: req.body.authInfo.users_id, title: req.body.title })
+		const postedId = await knex('lists').insert({ users_id: req.authInfo.users_id, title: req.body.title })
 		if (!postedId[0]) throw new Error('error posting new list')
 
 		const newList = await knex('lists').where('id', postedId[0])

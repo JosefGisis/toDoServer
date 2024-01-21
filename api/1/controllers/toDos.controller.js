@@ -3,10 +3,10 @@ const knex = require('../../../knexConnection.js')
 module.exports.toDos = async function (req, res, next) {
 	try {
 		// need to check if valid user a toDos may come back empty regardless if user is valid or not
-		const validUser = await knex('users').where('id', req.body.authInfo.users_id)
+		const validUser = await knex('users').where('id', req.authInfo.users_id)
 		if (!validUser.length) return res.status(404).json({status: 404, message: 'error performing request', data: null})
 
-		const toDos = await knex('to_dos').where('users_id', req.body.authInfo.users_id)
+		const toDos = await knex('to_dos').where('users_id', req.authInfo.users_id)
 		
 		res.json({status: 200, message: '', data: toDos })
 		next()
@@ -48,7 +48,7 @@ module.exports.deleteToDo = async function (req, res, next) {
 	
 // 	try {
 // 		// returns the id of the new to-do
-// 		const postedToDo = await knex('to_dos').insert({users_id: req.body.authInfo.users_id, title: title, due_date: due_date, membership: membership})
+// 		const postedToDo = await knex('to_dos').insert({users_id: req.authInfo.users_id, title: title, due_date: due_date, membership: membership})
 		
 // 		res.json({status: 200, message: 'new to-do posted', data: postedToDo })
 // 		next()
@@ -64,7 +64,7 @@ module.exports.deleteToDo = async function (req, res, next) {
 // 	if (!membership) return res.status(400).json({status: 400, message: 'membership required', data: null})
 
 // 	try {
-// 		const deletedToDos = await knex('to_dos').where('users_id', req.body.authInfo.users_id).andWhere('membership', req.body.membership).del()
+// 		const deletedToDos = await knex('to_dos').where('users_id', req.authInfo.users_id).andWhere('membership', req.body.membership).del()
 		
 // 		if (!deletedToDos[0]) return res.status(400).json({status: 400, message: 'error deleting to-dos', data: null})
 
@@ -81,7 +81,7 @@ module.exports.deleteToDo = async function (req, res, next) {
 // 	if (!title || !due_date || !membership) return res.status(400).json({status: 400, message: 'membership, title, and due-date required', data: null})
 
 // 	try {
-// 		const putToDo = await knex('to_dos').where('users_id', req.body.authInfo.users_id).andWhere('membership', req.params.toDoId).update({title: title, due_date: due_date, membership: membership})
+// 		const putToDo = await knex('to_dos').where('users_id', req.authInfo.users_id).andWhere('membership', req.params.toDoId).update({title: title, due_date: due_date, membership: membership})
 
 // 		res.send({status: 200, message: 'error putting to-do', data: putToDo})
 // 		next()

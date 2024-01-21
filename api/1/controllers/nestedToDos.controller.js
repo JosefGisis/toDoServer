@@ -36,7 +36,7 @@ module.exports.postToDo = async function (req, res, next) {
 
 		// postedToDo returns the id of the new to-do
 		const postedId = await knex('to_dos').insert({
-			users_id: req.body.authInfo.users_id,
+			users_id: req.authInfo.users_id,
 			title: title,
 			due_date: due_date || null,
 			membership: req.params.listId,
