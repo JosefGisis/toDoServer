@@ -1,18 +1,11 @@
-const knex = require('../../../knexConnection.js')
+const knex = require('../../../src/services/database/knexConnection.js')
 
 module.exports.toDos = async function (req, res, next) {
 	try {
-        // need to check if listId is correct as toDos may come back empty whether list is valid or not
-		const validList = await knex('lists').where('id', req.params.listId)
-		if (!validList.length) return res.status(404).json({ status: 404, message: 'error performing request', data: null })
-
 		const toDos = await knex('to_dos').where('membership', req.params.listId)
-
 		res.json({ status: 200, message: '', data: toDos })
-		next()
 	} catch (err) {
-		console.error(err)
-		res.status(500).json({ status: 500, message: 'error performing request. Please try again soon', data: null })
+		next(err)
 	}
 }
 
@@ -21,11 +14,9 @@ module.exports.toDo = async function (req, res, next) {
 		const toDo = await knex('to_dos').where('id', req.params.toDoId)
 		if (!toDo.length) throw new Error('error getting to-do')
 
-		res.json({status: 200, message: '', data: toDo})
-		next()
+		res.json({ status: 200, message: '', data: toDo })
 	} catch (err) {
-		console.error(err)
-		res.status(500).json({ status: 500, message: 'error performing request. Please try again soon', data: null })
+		next(err)
 	}
 }
 
@@ -43,12 +34,10 @@ module.exports.postToDo = async function (req, res, next) {
 		})
 		if (!postedId[0]) throw new Error('error posting to-do')
 
-        const newToDo = await knex('to_dos').where('id', postedId[0])
+		const newToDo = await knex('to_dos').where('id', postedId[0])
 		res.json({ status: 200, message: 'new to-do posted', data: newToDo })
-		next()
 	} catch (err) {
-		console.error(err)
-		res.status(500).json({ status: 500, message: 'error performing request. Please try again soon', data: null })
+		next(err)
 	}
 }
 
@@ -58,10 +47,8 @@ module.exports.deleteToDo = async function (req, res, next) {
 		if (!deleted) throw new Error('error deleting to-do')
 
 		res.json({ status: 200, message: `deleted ${deleted} to-do(s)`, data: null })
-		next()
 	} catch (err) {
-		console.error(err)
-		res.status(500).json({ status: 500, message: 'error performing request. Please try again soon', data: null })
+		next(err)
 	}
 }
 
@@ -73,10 +60,8 @@ module.exports.deleteToDos = async function (req, res, next) {
 		const deleted = await knex('to_dos').where('membership', req.params.listId).del()
 
 		res.json({ status: 200, message: `deleted ${deleted} to-do(s)`, data: null })
-		next()
 	} catch (err) {
-		console.error(err)
-		res.status(500).json({ status: 500, message: 'error performing request. Please try again soon', data: null })
+		next()
 	}
 }
 
@@ -88,14 +73,12 @@ module.exports.putToDo = async function (req, res, next) {
 		const updated = await knex('to_dos')
 			.where('id', req.params.toDoId)
 			.update({ title: title, due_date: due_date || null, membership: membership || req.params.listId })
-        if (!updated) throw new Error('error updating to-do')
+		if (!updated) throw new Error('error updating to-do')
 
-        const updatedToDo = await knex('to_dos').where('id', req.params.toDoId)
+		const updatedToDo = await knex('to_dos').where('id', req.params.toDoId)
 
 		res.send({ status: 200, message: 'updated to-do', data: updatedToDo })
-		next()
 	} catch (err) {
-		console.error(err)
-		res.status(500).json({ status: 500, message: 'error performing request. Please try again soon', data: null })
+		next(err)
 	}
 }

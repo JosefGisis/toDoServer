@@ -1,82 +1,60 @@
-const knex = require('../../../knexConnection.js')
-const database = require('../../../services/database')
+const database = require('../../../src/services/database')
 
-module.exports.lists = async function (req, res) {
+module.exports.lists = async function (req, res, next) {
 	try {
-		// database.lists.list(userId, {sort:})
-		console.log(req.authInfo.users_id)
-		const lists = await knex('lists').where('users_id', req.authInfo.users_id)
-        
-		res.json({status: 200, message: '', data: lists})
-		// next()
+		const lists = await database.lists.lists({ userId: req.user.id })
+		res.json({ status: 200, message: '', data: lists })
 	} catch (err) {
-		console.error(err)
-		res.status(500).json({status: 500, message: 'error performing request. Please try again soon', data: null})
+		next(err)
 	}
 }
 
 module.exports.list = async function (req, res, next) {
 	try {
-		const list = await knex('lists').where('id', req.params.listId)
-		if (!list.length) throw new Error('error performing request')
-		
-        res.json({status: 200, message: '', data: list})
-		next()
+		const list = await database.lists.list({ listId: req.params.listId })
+		if (!list) return res.status(404).json({ message: 'list not found' })
+		return res.json({ status: 200, message: '', data: list })
 	} catch (err) {
-		console.error(err)
-		res.status(500).json({status: 500, message: 'error performing request. Please try again soon', data: null})
+		next(err)
 	}
 }
 
 module.exports.postList = async function (req, res, next) {
 	try {
 		const { title } = req.body
-		if (!title) return res.status(400).json({status: 400, message: 'list title required', data: null})
+		if (!title) return res.status(400).json({ message: 'list title required' })
 
-		// returns the id of the newly created list
-		const postedId = await knex('lists').insert({ users_id: req.authInfo.users_id, title: req.body.title })
-		if (!postedId[0]) throw new Error('error posting new list')
+		const postedId = await database.lists.postList({ userId: req.user.id, title })
+		if (!postedId) throw new Error('error posting new list')
 
-		const newList = await knex('lists').where('id', postedId[0])
-        
-		res.json({status: 200, message: 'new list posted', data: newList})
-		next()
+		const newList = await database.lists.list({ listId: req.params.listId })
+		res.json({ status: 200, message: 'new list posted', data: newList })
 	} catch (err) {
-		console.error(err)
-		res.status(500).send({status: 500, message: 'error performing request. Please try again soon', data: null})
+		next(err)
 	}
 }
 
 module.exports.deleteList = async function (req, res, next) {
 	try {
-		// returns number of deleted lists
-		const deleted = await knex('lists').where('id', req.params.listId).del()
-		if (!deleted) throw new Error('error deleting list')
-		
-		res.json({status: 200, message: `deleted ${deleted} list(s)`, data: null})
-		next()
+		const quantityDeleted = await database.lists.deleteList({ listId: req.params.listId })
+		if (!quantityDeleted) throw new Error('error deleting list')
+		res.json({ status: 200, message: `deleted ${quantityDeleted} list(s)`, data: null })
 	} catch (err) {
-		console.error(err)
-		res.status(500).send({status: 500, message: 'error performing request. Please try again soon', data: null})
+		next(err)
 	}
 }
 
 module.exports.putList = async function (req, res, next) {
 	try {
 		const { title } = req.body
-		if (!title) return res.status(400).json({status: 400, message: 'list title required', data: null})
+		if (!title) return res.status(400).json({ status: 400, message: 'list title required', data: null })
 
-		// returns the number of changed lists
-		const updated = await knex('lists').where('id', req.params.listId).update('title', req.body.title)
-		console.log(updated)
-		if (!updated) throw new Error('error putting list')
+		const quantityUpdated = await database.lists.putList({ listId: req.params.listId, title })
+		if (!quantityUpdated) throw new Error('error putting list')
 
-		const updatedList = await knex('lists').where('id', req.params.listId)
-		
-		res.json({status: 200, message: 'list updated', data: updatedList})
-		next()
+		const updatedList = await database.lists.list({listId: req.params.listId,})
+		res.json({ status: 200, message: 'list updated', data: updatedList })
 	} catch (err) {
-		// console.error(err)
-		res.status(500).send({status: 500, message: 'error performing request. Please try again soon', data: null})
+		next()
 	}
 }

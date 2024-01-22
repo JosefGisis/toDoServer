@@ -1,11 +1,10 @@
-const knex = require('../../../knexConnection.js')
+const knex = require('../../../src/services/database/knexConnection.js')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 const saltRounds = 10
 
 module.exports.login = async function (req, res, next) {
-	
 	try {
 		const { username, password } = req.body
 		if (!username || !password) return res.status(400).json({status: 400, message: 'error performing request', data: null})
