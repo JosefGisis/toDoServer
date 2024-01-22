@@ -1,11 +1,11 @@
 const knex = require('./knexConnection')
 
-module.exports.lists = async function ({ userId }) {
+module.exports.getLists = async function ({ userId }) {
 	if (!userId) throw new Error('missing parameter: userId')
 	return await knex('lists').where('users_id', userId)
 }
 
-module.exports.list = async function ({ listId }) {
+module.exports.getList = async function ({ listId }) {
 	if (!listId) throw new Error('missing parameter: listId')
 	const list = await knex('lists').where('id', listId)
 	return list[0]
