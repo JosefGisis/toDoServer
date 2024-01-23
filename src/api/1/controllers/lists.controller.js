@@ -4,8 +4,8 @@ module.exports.lists = async function (req, res, next) {
 	try {
 		const lists = await database.listsDB.getLists({ 
 			userId: req.user.id, 
-			sortBy: req.body.sortBy, 
-			order: req.body.order
+			sortBy: req.query.sortBy, 
+			order: req.query.order
 		})
 		res.json({ status: 200, message: '', data: lists })
 	} catch (err) {

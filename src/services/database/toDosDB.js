@@ -48,7 +48,7 @@ module.exports.putToDo = async function ({ listId, membership, title, dueDate, t
 		title: title,
 		due_date: dueDate || prevDueDate,
 		membership: membership || listId,
-		last_updated: knex.raw('NOW()')
+		last_modified: knex.raw('NOW()')
 	})
 	
 	const postedToDo = await knex('to_dos').where('id', toDoId)

@@ -3,12 +3,12 @@ const knex = require('./knexConnection')
 /** 
  * @param {Object} params
  * @param {number} params.userId
- * @param {('id'|'title'|'last_updated'|'creation_date')} [params.sortBy='id']
+ * @param {('id'|'title'|'last_updated'|'creation_date')} [params.sortBy='title']
  * @param {('asc'|'desc')} [params.order='asc']
  */
 module.exports.getLists = async function ({ userId, sortBy = 'id', order = 'asc' }) {
 	if (!userId) throw new Error('missing parameter: userId')
-	if (['id', 'title', 'last_updated', 'creation_date'].includes(sortBy) && ['asc', 'desc'].includes(order)) {
+	if (['id', 'title', 'last_modified', 'creation_date', 'last_accessed'].includes(sortBy) && ['asc', 'desc'].includes(order)) {
 		return await knex('lists').where('users_id', userId).orderBy(sortBy, order)
 	} else {
 		throw new Error('invalid sorting argument ')
@@ -46,7 +46,7 @@ module.exports.putList = async function ({ listId, title, accessList }) {
 			.where('id', listId)
 			.update({
 				title,
-				last_updated: knex.raw('NOW()'),
+				last_modified: knex.raw('NOW()'),
 				last_accessed: knex.raw('NOW()')
 			}	
 		)
