@@ -17,14 +17,15 @@ module.exports.getToDo = async function ({ toDoId }) {
 }
 
 module.exports.postToDo = async function ({ userId, listId, title, dueDate }) {
-	if (!userId || !listId || !title || !dueDate) throw new Error('missing parameter: usersId/listId/dueDate/title')
+	if (!userId || !listId || !title) throw new Error('missing parameter: usersId/listId/title')
 	const postedId = await knex('to_dos').insert({
 		users_id: userId,
 		title: title,
 		due_date: dueDate || null,
 		membership: listId,
 	})
-	return postedId[0]
+	const newToDo = await knex('to_dos').where('id', postedId[0]) 
+	return newToDo[0]
 }
 
 module.exports.deleteToDo = async function ({ toDoId }) {
@@ -37,12 +38,19 @@ module.exports.deleteToDos = async function ({ listId }) {
 	return await knex('to_dos').where('membership', listId).del()
 }
 
-module.exports.putToDo = async function ({ listId, title, dueDate, toDoId }) {
-	if (!toDoId || !listId || !title || !dueDate) throw new Error('missing parameter: toDoId/listId/dueDate/title')
-	const postedId = await knex('to_dos').where('id', toDoId).update({
+module.exports.putToDo = async function ({ listId, membership, title, dueDate, toDoId }) {
+	if (!toDoId || !listId || !title) throw new Error('missing parameter: toDoId/listId/title')
+
+	const toDo = await knex('to_dos').where('id', toDoId)
+	const prevDueDate = toDo[0].due_date
+
+	await knex('to_dos').where('id', toDoId).update({
 		title: title,
-		due_date: dueDate,
-		membership: listId,
+		due_date: dueDate || prevDueDate,
+		membership: membership || listId,
+		last_updated: knex.raw('NOW()')
 	})
-	return postedId[0]
+	
+	const postedToDo = await knex('to_dos').where('id', toDoId)
+	return postedToDo[0]
 }

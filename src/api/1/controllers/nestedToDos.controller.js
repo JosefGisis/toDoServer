@@ -25,15 +25,12 @@ module.exports.postToDo = async function (req, res, next) {
 		const { title, due_date } = req.body
 		if (!title) return res.status(400).json({ status: 400, message: 'title required', data: null })
 
-		const postedId = await database.toDosDB.postToDo({
-			userId: req.authInfo.users_id,
+		const newToDo = await database.toDosDB.postToDo({
+			userId: req.user.id,
 			listId: req.params.listId,
 			dueDate: due_date,
 			title,
 		})
-		if (!postedId) throw new Error('error posting to-do')
-
-		const newToDo = await database.toDosDB.getToDo({ toDoId: postedId })
 		res.json({ status: 200, message: 'new to-do posted', data: newToDo })
 	} catch (err) {
 		next(err)
@@ -65,15 +62,12 @@ module.exports.putToDo = async function (req, res, next) {
 		const { title, due_date, membership } = req.body
 		if (!title) return res.status(400).json({ status: 400, message: 'title required', data: null })
 
-		const updatedId = await database.toDosDB.putToDo({
+		const updatedToDo = await database.toDosDB.putToDo({
 			title,
 			dueDate: due_date,
 			listId: req.params.listId || membership,
 			toDoId: req.params.toDoId,
 		})
-		if (!updatedId) throw new Error('error updating to-do')
-
-		const updatedToDo = await knex('to_dos').where('id', req.params.toDoId)
 		res.send({ status: 200, message: 'updated to-do', data: updatedToDo })
 	} catch (err) {
 		next(err)

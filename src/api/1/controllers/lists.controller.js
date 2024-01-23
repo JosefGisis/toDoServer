@@ -2,7 +2,11 @@ const database = require('../../../services/database/index')
 
 module.exports.lists = async function (req, res, next) {
 	try {
-		const lists = await database.listsDB.getLists({ userId: req.user.id })
+		const lists = await database.listsDB.getLists({ 
+			userId: req.user.id, 
+			sortBy: req.body.sortBy, 
+			order: req.body.order
+		})
 		res.json({ status: 200, message: '', data: lists })
 	} catch (err) {
 		next(err)
@@ -24,10 +28,7 @@ module.exports.postList = async function (req, res, next) {
 		const { title } = req.body
 		if (!title) return res.status(400).json({ message: 'list title required' })
 
-		const postedId = await database.listsDB.postList({ userId: req.user.id, title })
-		if (!postedId) throw new Error('error posting new list')
-
-		const newList = await database.listsDB.getList({ listId: req.params.listId })
+		const newList = await database.listsDB.postList({ userId: req.user.id, title })
 		res.json({ status: 200, message: 'new list posted', data: newList })
 	} catch (err) {
 		next(err)
@@ -49,10 +50,7 @@ module.exports.putList = async function (req, res, next) {
 		const { title } = req.body
 		if (!title) return res.status(400).json({ status: 400, message: 'list title required', data: null })
 
-		const quantityUpdated = await database.listsDB.putList({ listId: req.params.listId, title })
-		if (!quantityUpdated) throw new Error('error putting list')
-
-		const updatedList = await database.listsDB.getList({listId: req.params.listId,})
+		const updatedList = await database.listsDB.putList({ listId: req.params.listId, title })
 		res.json({ status: 200, message: 'list updated', data: updatedList })
 	} catch (err) {
 		next()

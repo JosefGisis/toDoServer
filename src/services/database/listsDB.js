@@ -1,8 +1,18 @@
 const knex = require('./knexConnection')
 
-module.exports.getLists = async function ({ userId }) {
+/** 
+ * @param {Object} params
+ * @param {number} params.userId
+ * @param {('id'|'title'|'last_updated'|'creation_date')} [params.sortBy='id']
+ * @param {('asc'|'desc')} [params.order='asc']
+ */
+module.exports.getLists = async function ({ userId, sortBy = 'id', order = 'asc' }) {
 	if (!userId) throw new Error('missing parameter: userId')
-	return await knex('lists').where('users_id', userId)
+	if (['id', 'title', 'last_updated', 'creation_date'].includes(sortBy) && ['asc', 'desc'].includes(order)) {
+		return await knex('lists').where('users_id', userId).orderBy(sortBy, order)
+	} else {
+		throw new Error('invalid sorting argument ')
+	}
 }
 
 module.exports.getList = async function ({ listId }) {
@@ -12,9 +22,13 @@ module.exports.getList = async function ({ listId }) {
 }
 
 module.exports.postList = async function ({ userId, title }) {
-	if (!userId || !title) throw new Error('missing parameter: listId or title')
-	const postedId = await knex('lists').insert({ users_id: userId, title: title })
-	return postedId[0]
+	if (!userId || !title) throw new Error('missing parameter: userId or title')
+	const postedId = await knex('lists').insert({
+		users_id: userId,
+		title: title,
+	})
+	const newList = await knex('lists').where('id', postedId[0])
+	return newList[0]
 }
 
 module.exports.deleteList = async function ({ listId }) {
@@ -24,5 +38,24 @@ module.exports.deleteList = async function ({ listId }) {
 
 module.exports.putList = async function ({ listId, title }) {
 	if (!listId || !title) throw new Error('missing parameter: listId or title')
-	return await knex('lists').where('id', listId).update('title', title)
+
+	await knex('lists')
+		.where('id', listId)
+		.update({
+			title,
+			last_updated: knex.raw('NOW()'),
+		}	
+	)
+
+	const postedList = await knex('lists').where('id', listId)
+	return postedList[0]
+}
+
+module.exports.accessList = async function ({ listId }) {
+	if (!listId) throw new Error('missing parameter: listId')
+	
+	await knex('lists').where('id', listId).update({last_accessed: knex.raw('NOW()')})
+	
+	const postedList = await knex('lists').where('id', listId)
+	return postedList[0]
 }
