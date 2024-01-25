@@ -36,10 +36,10 @@ module.exports.deleteList = async function ({ listId }) {
 	return await knex('lists').where('id', listId).del()
 }
 
-module.exports.putList = async function ({ listId, title, accessList }) {
+module.exports.putList = async function ({ listId, title, accessListOnly }) {
 	if (!listId || !title) throw new Error('missing parameter: listId or title')
 	
-	if (accessList) {
+	if (accessListOnly) {
 		await knex('lists').where('id', listId).update({last_accessed: knex.raw('NOW()')})
 	} else {
 		await knex('lists')

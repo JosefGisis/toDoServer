@@ -1,4 +1,3 @@
-const knex = require('../../../services/database/knexConnection')
 const database = require('../../../services/database')
 
 module.exports.toDos = async function (req, res, next) {

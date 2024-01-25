@@ -24,6 +24,7 @@ app.use('/api/1', v1(passport))
 
 // app.use(helmet())
 app.use((err, req, res, next) => {
+    console.log(err)
     res.status(500).json({message: err.message})
     next() //just to remove red squiggly lines >:(
 })
