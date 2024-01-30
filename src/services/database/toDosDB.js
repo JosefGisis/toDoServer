@@ -1,12 +1,9 @@
 const knex = require('./knexConnection')
 
-module.exports.getListToDos = async function ({ listId }) {
-	if (!listId) throw new Error('missing parameter: listId')
-	return await knex('to_dos').where('membership', listId)
-}
-
-module.exports.getToDos = async function () {
-	return await knex('to_dos').where('membership', null)
+module.exports.getToDos = async function ({listId, userId}) {
+	if (!listId && !userId) throw new Error('missing parameter: require listId or userId')
+	if (listId) return await knex('to_dos').where('membership', listId)
+	return await knex('to_dos').where('users_id', userId).andWhere('membership', null)
 }
 
 module.exports.getToDo = async function ({ toDoId }) {
@@ -32,21 +29,35 @@ module.exports.deleteToDo = async function ({ toDoId }) {
 	return await knex('to_dos').where('id', toDoId).del()
 }
 
-module.exports.deleteToDos = async function ({ listId }) {
-	if (!listId) throw new Error('missing parameter: listId')
-	return await knex('to_dos').where('membership', listId).del()
+module.exports.deleteToDos = async function ({ listId, userId }) {
+	if (!listId && !userId) throw new Error('missing parameter: require listId or userId')
+	if (listId) return await knex('to_dos').where('membership', listId).del()
+	return await knex('to_dos').where('users_id', userId).andWhere('membership', null).del()
 }
 
-module.exports.putToDo = async function ({ listId, membership, title, dueDate, toDoId }) {
-	if (!toDoId || !listId || !title) throw new Error('missing parameter: toDoId/listId/title')
+module.exports.putToDo = async function ({ membership, title, dueDate, toDoId }) {
+	if (!toDoId || !title) throw new Error('missing parameter: toDoId/listId/title')
 
 	const toDo = await knex('to_dos').where('id', toDoId)
 	const prevDueDate = toDo[0].due_date
+	const prevMembership = toDo[0].membership
 
 	await knex('to_dos').where('id', toDoId).update({
 		title: title,
 		due_date: dueDate || prevDueDate,
-		membership: membership || listId,
+		membership: membership || prevMembership,
+		last_modified: knex.raw('NOW()')
+	})
+	
+	const postedToDo = await knex('to_dos').where('id', toDoId)
+	return postedToDo[0]
+}
+
+module.exports.toggleToDo = async function ({ toDoId }) {
+	if (!toDoId) throw new Error('missing parameter: toDoId')
+
+	await knex('to_dos').where('id', toDoId).update({
+		completed: knex.raw('NOT ??', 'completed'),
 		last_modified: knex.raw('NOW()')
 	})
 	

@@ -13,4 +13,6 @@ router.delete('/', controller.deleteToDos)
 
 router.put('/:toDoId', controller.putToDo)
 
+router.put('/:toDoId/toggle', controller.toggleToDo)
+
 module.exports = router

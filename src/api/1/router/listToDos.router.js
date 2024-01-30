@@ -1,5 +1,5 @@
 const router = require('express').Router({ mergeParams: true })
-const controller = require('../controllers/nestedToDos.controller')
+const controller = require('../controllers/toDos.controller')
 
 // returns all to-dos associated with active list
 router.get('/', controller.toDos)
@@ -16,4 +16,6 @@ router.delete('/', controller.deleteToDos)
 
 router.put('/:toDoId', controller.putToDo)
 
-module.exports = router
+router.put('/:toDoId/toggle', controller.toggleToDo)
+
+module.exports = router 
