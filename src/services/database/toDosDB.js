@@ -1,13 +1,12 @@
 const knex = require('./knexConnection')
 
-module.exports.getToDos = async function ({ listId }) {
+module.exports.getListToDos = async function ({ listId }) {
 	if (!listId) throw new Error('missing parameter: listId')
 	return await knex('to_dos').where('membership', listId)
 }
 
-module.exports.getUserToDos = async function ({ userId }) {
-	if (!userId) throw new Error('missing parameter: userId')
-	return await knex('to_dos').where('users_id', userId)
+module.exports.getToDos = async function () {
+	return await knex('to_dos').where('membership', null)
 }
 
 module.exports.getToDo = async function ({ toDoId }) {
@@ -17,12 +16,12 @@ module.exports.getToDo = async function ({ toDoId }) {
 }
 
 module.exports.postToDo = async function ({ userId, listId, title, dueDate }) {
-	if (!userId || !listId || !title) throw new Error('missing parameter: usersId/listId/title')
+	if (!userId || !title) throw new Error('missing parameter: usersId/title')
 	const postedId = await knex('to_dos').insert({
 		users_id: userId,
 		title: title,
 		due_date: dueDate || null,
-		membership: listId,
+		membership: listId || null,
 	})
 	const newToDo = await knex('to_dos').where('id', postedId[0]) 
 	return newToDo[0]

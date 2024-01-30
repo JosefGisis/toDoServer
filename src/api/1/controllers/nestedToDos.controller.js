@@ -2,7 +2,7 @@ const database = require('../../../services/database')
 
 module.exports.toDos = async function (req, res, next) {
 	try {
-		const toDos = await database.toDosDB.getToDos({ listId: req.params.listId })
+		const toDos = await database.toDosDB.getListToDos({ listId: req.params.listId })
 		res.json({ status: 200, message: '', data: toDos })
 	} catch (err) {
 		next(err)
