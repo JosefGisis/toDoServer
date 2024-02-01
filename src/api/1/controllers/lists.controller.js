@@ -39,7 +39,7 @@ module.exports.deleteList = async function (req, res, next) {
 	try {
 		const quantityDeleted = await database.listsDB.deleteList({ listId: req.params.listId })
 		if (!quantityDeleted) throw new Error('error deleting list')
-		res.json({ status: 200, message: `deleted ${quantityDeleted} list(s)`, data: null })
+		res.json({ status: 200, message: `deleted ${quantityDeleted} list(s)`, data: quantityDeleted })
 	} catch (err) {
 		next(err)
 	}
