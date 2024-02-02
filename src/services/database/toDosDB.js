@@ -29,12 +29,15 @@ module.exports.deleteToDo = async function ({ toDoId }) {
 	return await knex('to_dos').where('id', toDoId).del()
 }
 
+// seperate methods to specify purpose and logic
 module.exports.deleteToDos = async function ({ listId, userId }) {
 	if (!listId && !userId) throw new Error('missing parameter: require listId or userId')
 	if (listId) return await knex('to_dos').where('membership', listId).del()
 	return await knex('to_dos').where('users_id', userId).andWhere('membership', null).del()
 }
 
+
+// rename to update
 module.exports.putToDo = async function ({ membership, title, dueDate, toDoId }) {
 	const toDo = await knex('to_dos').where('id', toDoId)
 
@@ -49,6 +52,7 @@ module.exports.putToDo = async function ({ membership, title, dueDate, toDoId })
 	return postedToDo[0]
 }
 
+// combine with update
 module.exports.toggleToDo = async function ({ toDoId }) {
 	if (!toDoId) throw new Error('missing parameter: toDoId')
 

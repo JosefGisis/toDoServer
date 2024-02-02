@@ -2,11 +2,10 @@ const database = require('../../../services/database/index')
 
 module.exports.lists = async function (req, res, next) {
 	try {
-		const lists = await database.listsDB.getLists({ 
-			userId: req.user.id, 
-			sortBy: req.query.sortBy, 
-			order: req.query.order
-		})
+		// destructure  params
+		const { user, query } = req
+		const {sortBy, order} = query
+		const lists = await database.listsDB.getLists({ userId: user?.id, sortBy, order })
 		res.json({ status: 200, message: '', data: lists })
 	} catch (err) {
 		next(err)
