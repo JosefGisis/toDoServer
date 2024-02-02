@@ -21,14 +21,14 @@ module.exports.toDo = async function (req, res, next) {
 
 module.exports.postToDo = async function (req, res, next) {
 	try {
-		const { title, due_date } = req.body
+		const { title, dueDate } = req.body
 		if (!title) return res.status(400).json({ status: 400, message: 'title required', data: null })
 
 		const newToDo = await database.toDosDB.postToDo({
+			title,
+			dueDate,
 			userId: req.user.id,
 			listId: req.params.listId,
-			dueDate: due_date,
-			title,
 		})
 		res.json({ status: 200, message: 'new to-do posted', data: newToDo })
 	} catch (err) {
@@ -58,13 +58,11 @@ module.exports.deleteToDos = async function (req, res, next) {
 
 module.exports.putToDo = async function (req, res, next) {
 	try {
-		const { title, due_date, membership } = req.body
-		if (!title) return res.status(400).json({ status: 400, message: 'title required', data: null })
-
+		const { title, dueDate, membership } = req.body
 		const updatedToDo = await database.toDosDB.putToDo({
 			title,
-			dueDate: due_date,
-			membership: membership,
+			dueDate,
+			membership,
 			toDoId: req.params.toDoId,
 		})
 		res.send({ status: 200, message: 'updated to-do', data: updatedToDo })

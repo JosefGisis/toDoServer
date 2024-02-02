@@ -36,16 +36,12 @@ module.exports.deleteToDos = async function ({ listId, userId }) {
 }
 
 module.exports.putToDo = async function ({ membership, title, dueDate, toDoId }) {
-	if (!toDoId || !title) throw new Error('missing parameter: toDoId/listId/title')
-
 	const toDo = await knex('to_dos').where('id', toDoId)
-	const prevDueDate = toDo[0].due_date
-	const prevMembership = toDo[0].membership
 
 	await knex('to_dos').where('id', toDoId).update({
-		title: title,
-		due_date: dueDate || prevDueDate,
-		membership: membership || prevMembership,
+		title: title || toDo[0].title,
+		due_date: dueDate || toDo[0].due_date,
+		membership: membership || toDo[0].membership,
 		last_modified: knex.raw('NOW()')
 	})
 	
