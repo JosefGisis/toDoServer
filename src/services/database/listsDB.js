@@ -1,6 +1,7 @@
 const knex = require('./knexConnection')
 
-/** 
+// Search params are not necessary because lists are sorted on client
+/**
  * @param {Object} params
  * @param {number} params.userId
  * @param {('id'|'title'|'last_updated'|'creation_date')} [params.sortBy='title']
@@ -21,11 +22,12 @@ module.exports.getList = async function ({ listId }) {
 	return list[0]
 }
 
-module.exports.postList = async function ({ userId, title }) {
+// postList creates a new list and retrieves the new list from the db
+module.exports.createList = async function ({ userId, title }) {
 	if (!userId || !title) throw new Error('missing parameter: userId or title')
 	const postedId = await knex('lists').insert({
 		users_id: userId,
-		title: title,
+		title,
 	})
 	const newList = await knex('lists').where('id', postedId[0])
 	return newList[0]
@@ -36,22 +38,24 @@ module.exports.deleteList = async function ({ listId }) {
 	return await knex('lists').where('id', listId).del()
 }
 
-module.exports.putList = async function ({ listId, title, accessListOnly }) {
+module.exports.updateList = async function ({ listId, title, accessListOnly }) {
 	if (!listId || !title) throw new Error('missing parameter: listId or title')
-	
+
 	if (accessListOnly) {
-		await knex('lists').where('id', listId).update({last_accessed: knex.raw('NOW()')})
+		await knex('lists')
+			.where('id', listId)
+			.update({ last_accessed: knex.raw('NOW()') })
 	} else {
 		await knex('lists')
 			.where('id', listId)
 			.update({
 				title,
 				last_modified: knex.raw('NOW()'),
-				last_accessed: knex.raw('NOW()')
-			}	
-		)
+				last_accessed: knex.raw('NOW()'),
+			})
 	}
 
 	const postedList = await knex('lists').where('id', listId)
+	if (!postedList.length) throw new Error('Invalid parameter: listId')
 	return postedList[0]
 }

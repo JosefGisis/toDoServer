@@ -1,4 +1,3 @@
-const listsDB = require('./listsDB')
-const toDosDB = require('./toDosDB')
-const usersDB = require('./usersDB')
-module.exports = { listsDB, toDosDB, usersDB }
+module.exports.listsDB = require('./listsDB')
+module.exports.toDosDB = require('./toDosDB')
+module.exports.usersDB = require('./usersDB')

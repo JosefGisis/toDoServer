@@ -1,20 +1,21 @@
-require('dotenv').config()
+// require('dotenv').config()
 
 const cors = require('cors')
 const morgan = require('morgan')
-const passport = require('passport')
-const auth = require('./src/api/1/middleware/auth')
+const passport = require('./src/api/1/middleware/auth.js').passport
+// const auth = require('./src/api/1/middleware/auth')
 const v1 = require('./src/api/1/router')
-
+const port = 3000
 // const helmet = require('helmet')
 // const Joi = require('joi')
 // const config = require('config')
-
 const express = require('express')
 
 const app = express()
 app.use(passport.initialize())
-auth.init(passport)
+// auth.init(passport)
+
+console.log(passport)
 
 app.use(express.json())
 app.use(cors())
@@ -25,12 +26,13 @@ app.use('/api/1', v1(passport))
 // app.use(helmet())
 app.use((err, req, res, next) => {
     console.log(err)
-    res.status(500).json({message: err.message})
+    res.status(500).json({ message: err.message })
     next() //just to remove red squiggly lines >:(
 })
 
-const port = 3000
 
 app.listen(port, () => {
     console.log(`server is running on port ${port}`)
 })
+
+// module.exports.passport = passport

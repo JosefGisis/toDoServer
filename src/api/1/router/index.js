@@ -7,14 +7,14 @@ const profileRouter = require('./profile.router.js')
 
 const { authenticate } = require('../middleware/auth.js')
 
-module.exports = (passport) => {
+module.exports = () => {
 	router.use('/auth', authRouter)
 
-	router.use('/lists', authenticate(passport), listsRouter)
+	router.use('/lists', authenticate(), listsRouter)
 
-	router.use('/to-dos', authenticate(passport), toDosRouter)
+	router.use('/to-dos', authenticate(), toDosRouter)
 
-	router.use('/profile', authenticate(passport), profileRouter)
+	router.use('/profile', authenticate(), profileRouter)
 
 	return router
 }
