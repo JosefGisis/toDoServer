@@ -15,6 +15,7 @@ const app = express()
 app.use(passport.initialize())
 // auth.init(passport)
 
+// pre passport refactor finalization
 console.log(passport)
 
 app.use(express.json())
