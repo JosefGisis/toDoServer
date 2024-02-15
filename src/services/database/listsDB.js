@@ -10,7 +10,7 @@ const knex = require('./knexConnection')
 module.exports.getLists = async function ({ userId, sortBy = 'id', order = 'asc' }) {
 	if (!userId) throw new Error('missing parameter: userId')
 	if (['id', 'title', 'last_modified', 'creation_date', 'last_accessed'].includes(sortBy) && ['asc', 'desc'].includes(order)) {
-		return await knex('lists').where('users_id', userId).orderBy(sortBy, order)
+		return await knex('lists').where('user_id', userId).orderBy(sortBy, order)
 	} else {
 		throw new Error('invalid sorting argument ')
 	}
@@ -26,8 +26,10 @@ module.exports.getList = async function ({ listId }) {
 module.exports.createList = async function ({ userId, title }) {
 	if (!userId || !title) throw new Error('missing parameter: userId or title')
 	const postedId = await knex('lists').insert({
-		users_id: userId,
+		user_id: userId,
 		title,
+		last_accessed: knex.raw('NOW()'),
+		last_modified: knex.raw('NOW()')
 	})
 	const newList = await knex('lists').where('id', postedId[0])
 	return newList[0]
@@ -39,7 +41,7 @@ module.exports.deleteList = async function ({ listId }) {
 }
 
 module.exports.updateList = async function ({ listId, title, accessListOnly }) {
-	if (!listId || !title) throw new Error('missing parameter: listId or title')
+	if (!listId) throw new Error('missing parameter: listId')
 
 	if (accessListOnly) {
 		await knex('lists')

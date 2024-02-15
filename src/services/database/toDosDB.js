@@ -3,7 +3,7 @@ const knex = require('./knexConnection')
 // Get all not-list associated to-dos
 module.exports.getToDos = async function ({ userId }) {
 	if (!userId) throw new Error('missing parameter: require userId')
-	return await knex('to_dos').where('users_id', userId).andWhere('membership', null)
+	return await knex('to_dos').where('user_id', userId).andWhere('membership', null)
 }
 
 // Gets all of list's to-dos
@@ -15,7 +15,7 @@ module.exports.getListToDos = async function ({ listId }) {
 // Gets all of users to-dos. No use for yet
 module.exports.getAllToDos = async function ({ userId }) {
 	if (!userId) throw new Error('missing parameter: userId')
-	return await knex('to_dos').where('users_id', userId)
+	return await knex('to_dos').where('user_id', userId)
 }
 
 // Get a specific to-do
@@ -28,10 +28,11 @@ module.exports.getToDo = async function ({ toDoId }) {
 module.exports.createToDo = async function ({ userId, listId, title, dueDate }) {
 	if (!userId || !title) throw new Error('missing parameter: usersId/title')
 	const postedId = await knex('to_dos').insert({
-		users_id: userId,
+		user_id: userId,
 		title: title,
 		due_date: dueDate || null,
 		membership: listId || null,
+		last_modified: knex.raw('NOW()')
 	})
 	const newToDo = await knex('to_dos').where('id', postedId[0])
 	return newToDo[0]
@@ -50,7 +51,7 @@ module.exports.deleteSelectedToDos = async function ({ toDoIds }) {
 
 module.exports.deleteToDos = async function ({ userId }) {
 	if (!userId) throw new Error('missing parameter: require userId')
-	return await knex('to_dos').where('users_id', userId).andWhere('membership', null).del()
+	return await knex('to_dos').where('user_id', userId).andWhere('membership', null).del()
 }
 
 module.exports.deleteListToDos = async function ({ listId }) {

@@ -7,14 +7,12 @@ const profileRouter = require('./profile.router.js')
 
 const { authenticate } = require('../middleware/auth.js')
 
-module.exports = () => {
-	router.use('/auth', authRouter)
+router.use('/auth', authRouter)
 
-	router.use('/lists', authenticate(), listsRouter)
+router.use('/lists', authenticate(), listsRouter)
 
-	router.use('/to-dos', authenticate(), toDosRouter)
+router.use('/to-dos', authenticate(), toDosRouter)
 
-	router.use('/profile', authenticate(), profileRouter)
+router.use('/profile', authenticate(), profileRouter)
 
-	return router
-}
+module.exports = router

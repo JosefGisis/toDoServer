@@ -26,7 +26,7 @@ module.exports.createList = async function (req, res, next) {
 		const { user, body: {title} } = req
 		if (!title) return res.status(400).json({ message: 'list title required' })
 
-		const newList = await database.listsDB.postList({ userId: user.id, title })
+		const newList = await database.listsDB.createList({ userId: user.id, title })
 		res.json({ message: 'new list posted', data: newList })
 	} catch (err) {
 		next(err)
@@ -45,9 +45,7 @@ module.exports.deleteList = async function (req, res, next) {
 module.exports.updateList = async function (req, res, next) {
 	try {
 		const { params: { listId }, body: { title, accessListOnly } } = req
-		if (!title) return res.status(400).json({ message: 'list title required' })
-
-		const updatedList = await database.listsDB.putList({ listId, title, accessListOnly })
+		const updatedList = await database.listsDB.updateList({ listId, title, accessListOnly })
 		res.json({ message: 'list updated', data: updatedList })
 	} catch (err) {
 		next()
