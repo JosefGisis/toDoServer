@@ -25,8 +25,28 @@ module.exports.getToDo = async function ({ toDoId }) {
 	return toDo[0]
 }
 
-module.exports.createToDo = async function ({ userId, listId, title, dueDate }) {
+function mapToDoToDB(toDo){
+	const { title, dueDate, listId, userId } = toDo
+
+	const dbToDo = {}
+	if(title) dbToDo.title = title
+	dbToDo.due_date = dueDate || null
+	dbToDo.membership = listId || null
+	if(userId) dbToDo.user_id = userId
+	
+	return dbToDo
+}
+
+/**
+ * Create a todo
+ * @param {ToDo} toDo ToDo record to create
+ */
+module.exports.createToDo = async function (toDo) {
+	if(!toDo || typeof todo !== 'object') throw new Error('Invalid or missing argument: toDo')
+	const { userId, listId, title, dueDate } = toDo
 	if (!userId || !title) throw new Error('missing parameter: usersId/title')
+
+	const newToDo = mapToDoToDB(toDo)
 	const postedId = await knex('to_dos').insert({
 		user_id: userId,
 		title: title,
@@ -57,6 +77,20 @@ module.exports.deleteToDos = async function ({ userId }) {
 module.exports.deleteListToDos = async function ({ listId }) {
 	if (!listId ) throw new Error('missing parameter: require listId or userId')
 	return await knex('to_dos').where('membership', listId).del()
+}
+
+/**
+ * Update single todo
+ * @param {string} toDoId Id of the todo to update
+ * @param {ToDo} update Object with new values to update
+ */
+async function update(toDoId, update){
+	if(!toDoId) throw new Error('Invalid or missing argument: toDoId')
+	const updatedToDo = mapToDoToDB(update)
+	await knex('to_dos')
+			.where('id', toDoId)
+			.update({...updatedToDo, last_modified: knex.raw('NOW()'),
+			})
 }
 
 module.exports.updateToDo = async function ({ title, dueDate, toDoId, membership, listId, toggle, removeDueDate }) {
