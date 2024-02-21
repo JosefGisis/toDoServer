@@ -1,4 +1,5 @@
 const knex = require('./knexConnection')
+const mapListToDB = require('./listDBMapper').mapListToDB
 
 // Search params are not necessary because lists are sorted on client
 /**
