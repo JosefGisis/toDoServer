@@ -74,10 +74,10 @@ module.exports.updateToDo = async function (req, res, next) {
 		 * */ 
 		const {
 			params: { toDoId },
-			body: { title, dueDate, toggle, membership, removeDueDate },
+			body: { title, dueDate, completed, membership },
 		} = req
 
-		const updatedToDo = await database.toDosDB.updateToDo({ title, dueDate, toggle, membership, toDoId, removeDueDate })
+		const updatedToDo = await database.toDosDB.updateToDo({ title, dueDate, membership, toDoId, completed })
 		res.send({ message: 'updated to-do', data: updatedToDo })
 	} catch (err) {
 		next(err)

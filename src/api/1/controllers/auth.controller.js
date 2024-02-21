@@ -1,6 +1,7 @@
-const database = require('../../../services/database')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+
+const database = require('../../../services/database')
 
 const saltRounds = 10
 
@@ -17,8 +18,8 @@ module.exports.login = async function (req, res, next) {
 
 		const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_KEY)
 		res.json({ message: 'login successful', token })
-	} catch (err) {
-		next(err)
+	} catch (error) {
+		next(error)
 	}
 }
 
@@ -40,7 +41,7 @@ module.exports.register = async function (req, res, next) {
 
 		const token = jwt.sign({ id: newUser.id, username: newUser.username }, process.env.JWT_KEY)
 		res.json({ message: 'account created', token })
-	} catch (err) {
-		next(err)
+	} catch (error) {
+		next(error)
 	}
 }

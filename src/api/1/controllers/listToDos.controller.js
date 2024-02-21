@@ -21,11 +21,11 @@ module.exports.toDo = async function (req, res, next) {
 module.exports.createToDo = async function (req, res, next) {
 	try {
 		/**
-		 * Only title is required in the body. listId and userId is supplied by the request. 
+		 * Only title is required in the body. listId and userId is supplied by the request.
 		 */
 		const {
 			user: { id: userId },
-            params: { listId },
+			params: { listId },
 			body: { title, dueDate },
 		} = req
 
@@ -47,7 +47,6 @@ module.exports.deleteToDo = async function (req, res, next) {
 	}
 }
 
-
 module.exports.deleteListToDos = async function (req, res, next) {
 	try {
 		const { params, user } = req
@@ -64,13 +63,13 @@ module.exports.updateToDo = async function (req, res, next) {
 		 * Supply membership to override listId and move to-do to another list.
 		 * Supply toggle to only toggle list's completed status.
 		 * Supply due-date to update the to-do, or provide null to remove to-do.
-		 * */ 
+		 * */
 		const {
-			params: { toDoId, listId },
-			body: { title, dueDate, toggle, membership, removeDueDate },
+			params: { toDoId },
+			body: { title, dueDate, completed, membership },
 		} = req
 
-		const updatedToDo = await database.toDosDB.updateToDo({ title, dueDate, toggle, membership, toDoId, listId, removeDueDate })
+		const updatedToDo = await database.toDosDB.updateToDo({ title, dueDate, membership, toDoId, completed })
 		res.send({ message: 'updated to-do', data: updatedToDo })
 	} catch (err) {
 		next(err)

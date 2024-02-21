@@ -2,7 +2,6 @@
  * Maps list object to database fields
  * @param {List} list list record to create
  */
-
 module.exports.mapListToDB = function (list) {
 	const { title, userId } = list
 

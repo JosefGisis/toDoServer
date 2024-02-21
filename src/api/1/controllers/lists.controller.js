@@ -44,8 +44,8 @@ module.exports.deleteList = async function (req, res, next) {
 
 module.exports.updateList = async function (req, res, next) {
 	try {
-		const { params: { listId }, body: { title, accessListOnly } } = req
-		const updatedList = await database.listsDB.updateList({ listId, title, accessListOnly })
+		const { params: { listId }, body: { title } } = req
+		const updatedList = await database.listsDB.updateList( listId, { title })
 		res.json({ message: 'list updated', data: updatedList })
 	} catch (err) {
 		next()
