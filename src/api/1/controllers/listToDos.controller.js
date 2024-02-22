@@ -31,7 +31,7 @@ module.exports.createToDo = async function (req, res, next) {
 
 		if (!title) return res.status(400).json({ message: 'title required' })
 
-		const newToDo = await database.toDosDB.createToDo({ title, dueDate, listId, userId })
+		const newToDo = await database.toDosDB.createToDo({ title, dueDate, membership: listId, userId })
 		res.json({ message: 'new to-do posted', data: newToDo })
 	} catch (err) {
 		next(err)
@@ -69,7 +69,7 @@ module.exports.updateToDo = async function (req, res, next) {
 			body: { title, dueDate, completed, membership },
 		} = req
 
-		const updatedToDo = await database.toDosDB.updateToDo({ title, dueDate, membership, toDoId, completed })
+		const updatedToDo = await database.toDosDB.updateToDo(toDoId, { title, dueDate, membership, completed })
 		res.send({ message: 'updated to-do', data: updatedToDo })
 	} catch (err) {
 		next(err)

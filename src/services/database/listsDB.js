@@ -8,7 +8,7 @@ const mapListToDB = require('./listDBMapper').mapListToDB
 //  * @param {('id'|'title'|'last_updated'|'creation_date')} [params.sortBy='title']
 //  * @param {('asc'|'desc')} [params.order='asc']
 //  */
-module.exports.getLists = async function ({ userId, sortBy = 'create_date', order = 'desc' }) {
+module.exports.getLists = async function ({ userId, sortBy = 'creation_date', order = 'desc' }) {
 	if (!userId) throw new Error('missing parameter: userId')
 	return await knex('lists').where('user_id', userId).orderBy(sortBy, order)
 	// sort order logic is currently handled in client
