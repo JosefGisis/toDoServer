@@ -2,6 +2,7 @@ const JWTstrategy = require('passport-jwt').Strategy
 const ExtractJWT = require('passport-jwt').ExtractJwt
 const database = require('../../../services/database')
 const passport = require('passport')
+require('dotenv').config()
 
 const options = {
 	secretOrKey: process.env.JWT_KEY,

@@ -1,6 +1,18 @@
 {
-    "user": "TO_DO_DB_USER",
-    "password": "TO_DO_DB_PASSWORD",
-    "database": "TO_DO_DB_NAME",
-    "JWTToken": "JWT_TOKEN"
+    "db": {
+        "dev": {
+            "host": "LOCAL_HOST",
+            "username": "LOCAL_USERNAME",
+            "password": "LOCAL_PASSWORD",
+            "database": "LOCAL_DATABASE",
+            "port": "LOCAL_PORT"
+        },
+        "prod": {
+            "host": "JAWS_HOST",
+            "username": "JAWS_USERNAME",
+            "password": "JAWS_PASSWORD",
+            "database": "JAWS_DATABASE",
+            "port": "JAWS_PORT"
+        }
+    }
 }

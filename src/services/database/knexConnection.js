@@ -1,14 +1,16 @@
 require('dotenv').config()
-//const config = require('config')
+const config = require('config')
+
+const db = config.get( process.env.NODE_ENV === 'production' ? 'db.prod' : 'db.dev')
 
 const knex = require('knex')({
     client: 'mysql',
     connection: {
-        host: 'localhost',
-        port: 3306,
-        user: process.env.DB_USER,  // config.get('user')
-        password: process.env.DB_PASSWORD,  // config.get('password')
-        database: process.env.DB_NAME  // config.get('database')
+        host: db.host, //process.env.LOCAL_HOST,
+        port: db.port, //process.env.LOCAL_PORT,
+        user: db.username, //process.env.LOCAL_USERNAME,
+        password: db.password, //process.env.LOCAL_PASSWORD,
+        database: db.database //process.env.LOCAL_DATABASE
     }
 })
 
