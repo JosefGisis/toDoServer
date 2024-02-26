@@ -11,9 +11,9 @@ module.exports.login = async function (req, res, next) {
 		if (!username || !password) return res.status(400).json({ message: 'missing params: username and password required' })
 
 		const user = await database.usersDB.getUser({ username })
-		if (!user) return res.status(401).json({ message: 'invalid username or password' })
+		if (!user.length) return res.status(401).json({ message: 'invalid username or password' })
 
-		const validPassword = await bcrypt.compare(password, user.pass_word)
+		const validPassword = await bcrypt.compare(password, user.password)
 		if (!validPassword) return res.status(401).json({ message: 'invalid username or password' })
 
 		const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_KEY)
