@@ -23,9 +23,7 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: err.message })
     next() //just to remove red squiggly lines >:(
 })
-    
-const port = 3000
 
-app.listen(process.env.PORT, () => {
-    console.log(`server is running on port ${process.env.PORT}`)
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`server is running on port ${process.env.PORT || 3000 }`)
 })

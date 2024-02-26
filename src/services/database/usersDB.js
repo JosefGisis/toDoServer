@@ -26,7 +26,7 @@ module.exports.emailAvailable = async function ({ email }) {
 
 module.exports.createUser = async function ({ username, email, password }) {
 	if (!username || !email || !password) throw new Error('missing parameters: username/email/password')
-	const postedId = await knex('users').insert({ username, email, pass_word: password })
+	const postedId = await knex('users').insert({ username, email, password })
 	const newUser = await knex('users').where('id', postedId[0])
 	return newUser[0]
 }
