@@ -9,9 +9,10 @@ module.exports.login = async function (req, res, next) {
 	try {
 		const { username, password } = req.body
 		if (!username || !password) return res.status(400).json({ message: 'missing params: username and password required' })
-
+		console.log(username)
 		const user = await database.usersDB.getUser({ username })
-		if (!user.length) return res.status(401).json({ message: 'invalid username or password' })
+		console.log(user)
+		if (!user) return res.status(401).json({ message: 'invalid username or password' })
 
 		const validPassword = await bcrypt.compare(password, user.password)
 		if (!validPassword) return res.status(401).json({ message: 'invalid username or password' })
