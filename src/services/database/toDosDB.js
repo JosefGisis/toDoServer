@@ -44,7 +44,7 @@ module.exports.deleteListToDos = async function ({ listId }) {
 }
 /**
  * Create a todo
- * @param {Object} toDo object containing new to-do params
+ * @param {ToDo} toDo object containing new to-do params
  */
 module.exports.createToDo = async function (toDo) {
 	if (!toDo || typeof toDo !== 'object') throw new Error('Invalid or missing argument: toDo')
@@ -60,7 +60,7 @@ module.exports.createToDo = async function (toDo) {
 /**
  * Update single todo
  * @param {number} toDoId Id of the todo to update
- * @param {Object} update Object with new values to update
+ * @param {ToDo} update Object with new values to update
  **/
 module.exports.updateToDo = async function (toDoId, update) {
 	if (!toDoId) throw new Error('Invalid or missing argument: toDoId')

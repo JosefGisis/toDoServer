@@ -6,22 +6,23 @@ CREATE TABLE users(
     pass_word TEXT NOT NULL,
     creation_date DATE DEFAULT(CURRENT_DATE)
 );
-INSERT INTO users (
-    id,
-    email,
-    username,
-    pass_word,
-    creation_date,
-    last_modified
-  )
-VALUES (
-    id:int,
-    'email:varchar',
-    'username:varchar',
-    'pass_word:text',
-    'creation_date:date',
-    'last_modified:date'
-  );
+
+-- INSERT INTO users (
+--     id,
+--     email,
+--     username,
+--     pass_word,
+--     creation_date,
+--     last_modified
+--   )
+-- VALUES (
+--     id:int,
+--     'email:varchar',
+--     'username:varchar',
+--     'pass_word:text',
+--     'creation_date:date',
+--     'last_modified:date'
+--   );
 -- @block
 CREATE TABLE lists(
     id INT AUTO_INCREMENT,

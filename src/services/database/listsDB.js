@@ -32,7 +32,7 @@ module.exports.deleteList = async function ({ listId }) {
 
 /**
  * Create a list
- * @param {Object} list object that contains new list values
+ * @param {List} list object that contains new list values
  */
 module.exports.createList = async function (list) {
 	const { userId, title } = list
@@ -48,7 +48,7 @@ module.exports.createList = async function (list) {
 /**
  * Updates list
  * @param {number} listId
- * @param {Object} update List object containing list update properties
+ * @param {List} update List object containing list update properties
  */
 module.exports.updateList = async function (listId, update) {
 	if (!listId) throw new Error('missing parameter: listId')
