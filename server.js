@@ -26,6 +26,6 @@ app.use((err, req, res, next) => {
     
 const port = 3000
 
-app.listen(port, () => {
-    console.log(`server is running on port ${port}`)
+app.listen(process.env.PORT, () => {
+    console.log(`server is running on port ${process.env.PORT}`)
 })

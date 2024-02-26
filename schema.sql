@@ -12,8 +12,8 @@ CREATE TABLE lists(
     id INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(255) NOT NULL,
     creation_date DATE DEFAULT(NOW()),
-    last_accessed DATE DEFAULT(NOW())
-    last_modified DATE DEFAULT(NOW()) 
+    last_accessed DATE DEFAULT(NOW()),
+    last_modified DATE DEFAULT(NOW()),
     
     user_id INT, 
     
@@ -27,7 +27,7 @@ CREATE TABLE to_dos(
     creation_date DATE DEFAULT(NOW()),
     completed BOOLEAN DEFAULT FALSE,
     due_date DATE,
-    last_modified DATE DEFAULT(NOW())
+    last_modified DATE DEFAULT(NOW()),
     
     membership INT,
     user_id INT,
