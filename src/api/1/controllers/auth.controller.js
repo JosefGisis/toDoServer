@@ -9,9 +9,8 @@ module.exports.login = async function (req, res, next) {
 	try {
 		const { username, password } = req.body
 		if (!username || !password) return res.status(400).json({ message: 'missing params: username and password required' })
-		console.log(username)
+
 		const user = await database.usersDB.getUser({ username })
-		console.log(user)
 		if (!user) return res.status(401).json({ message: 'invalid username or password' })
 
 		const validPassword = await bcrypt.compare(password, user.password)
@@ -27,12 +26,12 @@ module.exports.login = async function (req, res, next) {
 module.exports.register = async function (req, res, next) {
 	try {
 		const { username, email, password } = req.body
-		if (!username || !email || !password) return res.status(400).json({ message: 'missing parameters: username/email/password required' })
+		if (!username || !email || !password) return res.status(400).json({ message: 'missing parameters: username/email/password' })
 
-		const usernameAvailable = database.usersDB.usernameAvailable({ username })
+		const usernameAvailable = await database.usersDB.usernameAvailable({ username })
 		if (!usernameAvailable) return res.status(400).json({ message: 'username unavailable' })
 
-		const emailAvailable = database.usersDB.emailAvailable({ email })
+		const emailAvailable = await database.usersDB.emailAvailable({ email })
 		if (!emailAvailable) return res.status(400).json({ message: 'email already associated with an account' })
 
 		const hashedPassword = bcrypt.hashSync(password, saltRounds)

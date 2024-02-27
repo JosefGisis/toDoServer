@@ -15,13 +15,13 @@ module.exports.getUser = async function ({ userId, username }) {
 module.exports.usernameAvailable = async function ({ username }) {
 	if (!username) throw new Error('missing parameters: username')
 	const user = await knex('users').where('username', username)
-	if (user[0]) return false
+	return user[0] ? false : true
 }
 
 module.exports.emailAvailable = async function ({ email }) {
 	if (!email) throw new Error('missing parameters: email')
 	const user = await knex('users').where('email', email)
-	if (user[0]) return false
+	return user[0] ? false : true
 }
 
 module.exports.createUser = async function ({ username, email, password }) {

@@ -85,3 +85,7 @@ ALTER TABLE lists CHANGE users_id user_id INT;
 
 -- @block
 ALTER TABLE lists ADD CONSTRAINT fk_lists_user FOREIGN KEY (user_id) REFERENCES users(id);
+
+-- @block
+ALTER TABLE users
+CHANGE COLUMN pass_word password VARCHAR(255) NOT NULL;
