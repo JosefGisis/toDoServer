@@ -2,6 +2,8 @@ const knex = require('./knexConnection')
 
 module.exports.getUser = async function ({ userId, username }) {
 	if (!userId && !username) throw new Error('missing parameters: userId and/or username')
+	console.log('userId is ' + userId)
+	console.log('username is ' + username)
 	if (userId) {
 		const user = await knex('users').where('id', userId)
 		return user[0]
