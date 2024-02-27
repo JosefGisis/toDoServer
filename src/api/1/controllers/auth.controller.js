@@ -36,8 +36,7 @@ module.exports.register = async function (req, res, next) {
 
 		const hashedPassword = bcrypt.hashSync(password, saltRounds)
 
-		const newUserId = await database.usersDB.createUser({ username, email, password: hashedPassword })
-		const newUser = await database.usersDB.getUser({ userId: newUserId })
+		const newUser = await database.usersDB.createUser({ username, email, password: hashedPassword })
 
 		const token = jwt.sign({ id: newUser.id, username: newUser.username }, process.env.JWT_KEY)
 		res.json({ message: 'account created', token })
