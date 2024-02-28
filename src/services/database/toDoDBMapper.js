@@ -9,7 +9,7 @@ module.exports.mapToDoToDB = function (toDo) {
 	if (userId) dbToDo.user_id = userId
 	if (dueDate || dueDate === null) dbToDo.due_date = dueDate
 	if (membership || membership === null) dbToDo.membership = membership
-	if (completed || completed === 0 || completed === null) dbToDo.completed = completed
+	if (completed || completed === 0 || completed === null) dbToDo.completed = completed ? 1 : 0
 	return dbToDo
 }
 
@@ -19,5 +19,6 @@ module.exports.mapToDoToDB = function (toDo) {
  */
 module.exports.mapToDoFromDB = function (toDo) {
 	const { id, title, completed, creation_date: creationDate, last_modified: lastModified, user_id: userId, due_date: dueDate, membership } = toDo
-	return { id, title, completed, membership, userId, creationDate, dueDate, lastModified }
+	const completedStatus = completed === 0 ? false : true 
+	return { id, title, completedStatus, membership, userId, creationDate, dueDate, lastModified }
 }
