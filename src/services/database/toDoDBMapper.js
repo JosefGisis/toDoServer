@@ -18,6 +18,6 @@ module.exports.mapToDoToDB = function (toDo) {
  * @param {ToDo} toDo ToDo record to map
  */
 module.exports.mapToDoFromDB = function (toDo) {
-	const { id, title, creation_date: creationDate, last_accessed: lastAccessed, last_modified: lastModified, user_id: userId, membership } = toDo
-	return { id, title, membership, userId, creationDate, lastAccessed, lastModified }
+	const { id, title, creation_date: creationDate, last_modified: lastModified, user_id: userId, due_date: dueDate, membership } = toDo
+	return { id, title, membership, userId, creationDate, dueDate, lastModified }
 }
