@@ -9,7 +9,7 @@ module.exports.mapToDoToDB = function (toDo) {
 	if (userId) dbToDo.user_id = userId
 	if (dueDate || dueDate === null) dbToDo.due_date = dueDate
 	if (membership || membership === null) dbToDo.membership = membership
-	if (completed || completed === null) dbToDo.completed = completed
+	if (completed || completed === 0 || completed === null) dbToDo.completed = completed
 	return dbToDo
 }
 
