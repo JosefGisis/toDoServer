@@ -18,7 +18,7 @@ module.exports.mapToDoToDB = function (toDo) {
  * @param {ToDo} toDo ToDo record to map
  */
 module.exports.mapToDoFromDB = function (toDo) {
-	const { id, title, completed, creation_date: creationDate, last_modified: lastModified, user_id: userId, due_date: dueDate, membership } = toDo
-	const completedStatus = completed === 0 ? false : true 
-	return { id, title, completedStatus, membership, userId, creationDate, dueDate, lastModified }
+	const { id, title, completed: completedBinary, creation_date: creationDate, last_modified: lastModified, user_id: userId, due_date: dueDate, membership } = toDo
+	const completed = completedBinary === 0 ? false : true 
+	return { id, title, completed, membership, userId, creationDate, dueDate, lastModified }
 }
