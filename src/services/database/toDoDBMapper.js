@@ -4,14 +4,12 @@
  */
 module.exports.mapToDoToDB = function (toDo) {
 	const { title, dueDate, membership, userId, completed } = toDo
-
 	const dbToDo = {}
 	if (title) dbToDo.title = title
 	if (userId) dbToDo.user_id = userId
-	dbToDo.due_date = dueDate || null
-	dbToDo.membership = membership || null
-	dbToDo.completed = completed || 0
-
+	dbToDo.dueDate = dueDate === null ? null : dueDate
+	dbToDo.membership = membership === null ? null : membership
+	dbToDo.completed = completed === null ? 0 : completed
 	return dbToDo
 }
 
