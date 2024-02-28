@@ -1,4 +1,5 @@
 /**
+ * Maps to-do object to database fields
  * @param {ToDo} toDo ToDo record to create
  */
 module.exports.mapToDoToDB = function (toDo) {
@@ -15,6 +16,7 @@ module.exports.mapToDoToDB = function (toDo) {
 }
 
 /**
+ * Maps list from database for api
  * @param {ToDo} toDo ToDo record to map
  */
 module.exports.mapToDoFromDB = function (toDo) {

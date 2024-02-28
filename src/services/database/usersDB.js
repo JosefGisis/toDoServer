@@ -1,6 +1,7 @@
 const knex = require('./knexConnection')
 const { mapUserFromDB } = require('./userDBMapper')
 
+// Gets user. Takes either a userId or username argument for user retrieval
 module.exports.getUser = async function ({ userId, username }) {
 	if (!userId && !username) throw new Error('missing parameters: userId and/or username')
 	if (userId) {
@@ -13,12 +14,14 @@ module.exports.getUser = async function ({ userId, username }) {
 	}
 }
 
+// Used by api to check if username is taken
 module.exports.usernameAvailable = async function ({ username }) {
 	if (!username) throw new Error('missing parameters: username')
 	const user = await knex('users').where('username', username)
 	return user[0] ? false : true
 }
 
+// Checks if email is already associated with an account
 module.exports.emailAvailable = async function ({ email }) {
 	if (!email) throw new Error('missing parameters: email')
 	const user = await knex('users').where('email', email)

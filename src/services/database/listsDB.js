@@ -11,7 +11,7 @@ const { mapListToDB, mapListFromDB } = require('./listDBMapper')
 module.exports.getLists = async function ({ userId, sortBy = 'creation_date', order = 'desc' }) {
 	if (!userId) throw new Error('missing parameter: userId')
 	const lists = await knex('lists').where('user_id', userId).orderBy(sortBy, order)
-	return lists.map(list => mapListFromDB(list))
+	return lists.map((list) => mapListFromDB(list))
 	// sort order logic is currently handled in client
 	// if (['id', 'title', 'last_modified', 'creation_date', 'last_accessed'].includes(sortBy) && ['asc', 'desc'].includes(order)) {
 	// 	return await knex('lists').where('user_id', userId).orderBy(sortBy, order)
@@ -20,6 +20,7 @@ module.exports.getLists = async function ({ userId, sortBy = 'creation_date', or
 	// }
 }
 
+// Get singular list
 module.exports.getList = async function ({ listId }) {
 	if (!listId) throw new Error('missing parameter: listId')
 	const list = await knex('lists').where('id', listId)
@@ -37,7 +38,7 @@ module.exports.deleteList = async function ({ listId }) {
  */
 module.exports.createList = async function (list) {
 	const { userId, title } = list
-	if (!userId || !title) throw new Error('missing parameter: userId or title')
+	if (!userId || !title) throw new Error('missing parameter: userId/title')
 
 	const dbList = mapListToDB(list)
 	const postedId = await knex('lists').insert({ ...dbList, last_modified: knex.raw('NOW()') })

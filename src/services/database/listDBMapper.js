@@ -13,10 +13,10 @@ module.exports.mapListToDB = function (list) {
 }
 
 /**
- * Maps list object from database fields
+ * Maps list object from database fields for api
  * @param {List} list
  */
 module.exports.mapListFromDB = function (list) {
 	const { id, title, user_id: userId, creation_date: creationDate, last_accessed: lastAccessed, last_modified: lastModified } = list
-	return { id, title, userId, creationDate, lastAccessed, lastModified}
+	return { id, title, userId, creationDate, lastAccessed, lastModified }
 }
