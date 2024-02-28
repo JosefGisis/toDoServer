@@ -9,8 +9,6 @@ router.post('/', controller.createToDo)
 
 router.delete('/:toDoId', controller.deleteToDo)
 
-router.delete('/', controller.deleteToDos)
-
 router.put('/:toDoId', controller.updateToDo)
 
 module.exports = router 

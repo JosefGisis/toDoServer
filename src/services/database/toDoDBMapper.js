@@ -1,5 +1,4 @@
 /**
- * Create a todo
  * @param {ToDo} toDo ToDo record to create
  */
 module.exports.mapToDoToDB = function (toDo) {
@@ -16,18 +15,9 @@ module.exports.mapToDoToDB = function (toDo) {
 }
 
 /**
- * Create a todo
  * @param {ToDo} toDo ToDo record to map
  */
-module.exports.mapFromDoToDB = function (toDo) {
-	const { title, dueDate, membership, userId, completed } = toDo
-
-	const dbToDo = {}
-	if (title) dbToDo.title = title
-	if (userId) dbToDo.user_id = userId
-	dbToDo.due_date = dueDate || null
-	dbToDo.membership = membership || null
-	dbToDo.completed = completed || 0
-
-	return dbToDo
+module.exports.mapToDoFromDB = function (toDo) {
+	const { id, title, creation_date: creationDate, last_accessed: lastAccessed, last_modified: lastModified, user_id: userId, membership } = toDo
+	return { id, title, membership, userId, creationDate, lastAccessed, lastModified }
 }

@@ -56,15 +56,6 @@ module.exports.deleteToDo = async function (req, res, next) {
 	}
 }
 
-module.exports.deleteToDos = async function (req, res, next) {
-	try {
-		const quantityDeleted = await database.toDosDB.deleteToDos({ userId: req.user.id })
-		res.json({ message: `deleted ${quantityDeleted} to-do(s)` })
-	} catch (err) {
-		next(err)
-	}
-}
-
 module.exports.updateToDo = async function (req, res, next) {
 	try {
 		/**

@@ -20,6 +20,15 @@ module.exports.list = async function (req, res, next) {
 	}
 }
 
+module.exports.deleteList = async function (req, res, next) {
+	try {
+		const quantityDeleted = await database.listsDB.deleteList({ listId: req.params.listId })
+		res.json({ message: `deleted ${quantityDeleted} list(s)` })
+	} catch (err) {
+		next(err)
+	}
+}
+
 module.exports.createList = async function (req, res, next) {
 	try {
 		const { user, body: {title} } = req
@@ -27,15 +36,6 @@ module.exports.createList = async function (req, res, next) {
 
 		const newList = await database.listsDB.createList({ userId: user.id, title })
 		res.json({ message: 'new list posted', data: newList })
-	} catch (err) {
-		next(err)
-	}
-}
-
-module.exports.deleteList = async function (req, res, next) {
-	try {
-		const quantityDeleted = await database.listsDB.deleteList({ listId: req.params.listId })
-		res.json({ message: `deleted ${quantityDeleted} list(s)` })
 	} catch (err) {
 		next(err)
 	}

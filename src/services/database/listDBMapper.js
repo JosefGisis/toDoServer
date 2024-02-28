@@ -11,3 +11,12 @@ module.exports.mapListToDB = function (list) {
 
 	return dbList
 }
+
+/**
+ * Maps list object from database fields
+ * @param {List} list
+ */
+module.exports.mapListFromDB = function (list) {
+	const { id, title, user_id: userId, creation_date: creationDate, last_accessed: lastAccessed, last_modified: lastModified } = list
+	return { id, title, userId, creationDate, lastAccessed, lastModified}
+}
