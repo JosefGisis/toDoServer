@@ -1,5 +1,5 @@
 const router = require('express').Router({ mergeParams: true })
-const controller = require('../controllers/listToDos.controller')
+const controller = require('../src/api/1/controllers/listToDos.controller')
 
 // returns all to-dos associated with list
 router.get('/', controller.listToDos)

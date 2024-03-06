@@ -27,10 +27,12 @@ module.exports.getList = async function ({ listId }) {
 	return mapListFromDB(list[0])
 }
 
+
 module.exports.deleteList = async function ({ listId }) {
 	if (!listId) throw new Error('missing parameter: listId')
 	return await knex('lists').where('id', listId).del()
 }
+
 
 /**
  * Create a list

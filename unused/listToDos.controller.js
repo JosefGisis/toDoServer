@@ -1,4 +1,4 @@
-const { toDosDB } = require('../../../services/database')
+const { toDosDB } = require('../src/services/database')
 
 module.exports.listToDos = async function (req, res, next) {
 	try {

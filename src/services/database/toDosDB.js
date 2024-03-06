@@ -1,23 +1,8 @@
 const knex = require('./knexConnection')
 const { mapToDoToDB, mapToDoFromDB } = require('./toDoDBMapper')
 
-// Get users all unassociated (non-list) to-dos
-module.exports.getToDos = async function ({ userId }) {
-	if (!userId) throw new Error('missing parameter: require userId')
-	const toDos = await knex('to_dos').where('user_id', userId).andWhere('membership', null)
-	return toDos.map((toDo) => mapToDoFromDB(toDo))
-}
-
-// Gets all of a lists to-dos
-module.exports.getListToDos = async function ({ listId }) {
-	if (!listId) throw new Error('missing parameter: require listId')
-	const toDos = await knex('to_dos').where('membership', listId)
-	return toDos.map((toDo) => mapToDoFromDB(toDo))
-}
-
 // Gets all of user's to-dos
-// Currently has no use
-module.exports.getAllToDos = async function ({ userId }) {
+module.exports.getToDos = async function ({ userId }) {
 	if (!userId) throw new Error('missing parameter: userId')
 	const toDos = await knex('to_dos').where('user_id', userId)
 	return toDos.map((toDo) => mapToDoFromDB(toDo))
@@ -28,6 +13,13 @@ module.exports.getToDo = async function ({ toDoId }) {
 	if (!toDoId) throw new Error('missing parameter: toDoId')
 	const toDo = await knex('to_dos').where('id', toDoId)
 	return mapToDoFromDB(toDo[0])
+}
+
+// Gets all of a lists to-dos
+module.exports.getToDosByList = async function ({ membership }) {
+	if (!membership) throw new Error('missing parameter: require listId')
+	const toDos = await knex('to_dos').where('membership', membership)
+	return toDos.map((toDo) => mapToDoFromDB(toDo))
 }
 
 // Delete singular to-do
@@ -44,9 +36,9 @@ module.exports.deleteToDos = async function ({ toDoIds }) {
 }
 
 // Empties list of to-dos
-module.exports.deleteListToDos = async function ({ listId }) {
-	if (!listId) throw new Error('missing parameter: require listId or userId')
-	return await knex('to_dos').where('membership', listId).del()
+module.exports.deleteToDosByList = async function ({ membership }) {
+	if (!membership) throw new Error('missing parameter: require listId or userId')
+	return await knex('to_dos').where('membership', membership).del()
 }
 /**
  * Create a todo
