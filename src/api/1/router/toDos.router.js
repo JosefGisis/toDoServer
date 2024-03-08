@@ -9,9 +9,9 @@ router.get('/:toDoId', controller.toDo)
 
 router.post('/', controller.createToDo)
 
-router.delete('/:toDoId', controller.deleteToDo)
-
 router.delete('/by-list', controller.deleteToDosByList)
+
+router.delete('/:toDoId', controller.deleteToDo)
 
 router.put('/:toDoId', controller.updateToDo)
 
