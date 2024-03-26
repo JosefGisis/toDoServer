@@ -1,42 +1,42 @@
-const knex = require('./knexConnection')
-const { mapToDoToDB, mapToDoFromDB } = require('./toDoDBMapper')
+import knex from './knexConnection'
+import { mapToDoToDB, mapToDoFromDB } from './toDoDBMapper'
 
 // Gets all of user's to-dos
-module.exports.getToDos = async function ({ userId }) {
+export const getToDos = async ( userId: number ) => {
 	if (!userId) throw new Error('missing parameter: userId')
 	const toDos = await knex('to_dos').where('user_id', userId)
 	return toDos.map((toDo) => mapToDoFromDB(toDo))
 }
 
 // Get singular to-do
-module.exports.getToDo = async function ({ toDoId }) {
+export const getToDo = async ( toDoId: number ) => {
 	if (!toDoId) throw new Error('missing parameter: toDoId')
 	const toDo = await knex('to_dos').where('id', toDoId)
 	return mapToDoFromDB(toDo[0])
 }
 
 // Gets all of a lists to-dos
-module.exports.getToDosByList = async function ({ membership }) {
+export const getToDosByList = async ( membership: number ) => {
 	if (!membership) throw new Error('missing parameter: require listId')
 	const toDos = await knex('to_dos').where('membership', membership)
 	return toDos.map((toDo) => mapToDoFromDB(toDo))
 }
 
 // Delete singular to-do
-module.exports.deleteToDo = async function ({ toDoId }) {
+export const deleteToDo = async ({ toDoId }) => {
 	if (!toDoId) throw new Error('missing parameter: toDoId')
 	return await knex('to_dos').where('id', toDoId).del()
 }
 
 // takes a list of toDoIds and deletes them. Does not delete all unassociated to-dos
-module.exports.deleteToDos = async function ({ toDoIds }) {
+export const deleteToDos = async ({ toDoIds }) => {
 	if (!toDoIds) throw new Error('Missing parameter: toDoIds')
 	if (!Array.isArray(toDoIds)) throw new Error('Invalid parameter: toDoIds needs to be of type Array')
 	return await knex('to_dos').whereIn('id', toDoIds).del()
 }
 
 // Empties list of to-dos
-module.exports.deleteToDosByList = async function ({ membership }) {
+export const deleteToDosByList = async ( membership: number ) => {
 	if (!membership) throw new Error('missing parameter: require listId or userId')
 	return await knex('to_dos').where('membership', membership).del()
 }
@@ -44,7 +44,7 @@ module.exports.deleteToDosByList = async function ({ membership }) {
  * Create a todo
  * @param {ToDo} toDo object containing new to-do params
  */
-module.exports.createToDo = async function (toDo) {
+export const createToDo = async (toDo: ToDo) => {
 	if (!toDo || typeof toDo !== 'object') throw new Error('Invalid or missing argument: toDo')
 	const { userId, title } = toDo
 	if (!userId || !title) throw new Error('missing parameter: usersId/title')
@@ -60,7 +60,7 @@ module.exports.createToDo = async function (toDo) {
  * @param {number} toDoId Id of the todo to update
  * @param {ToDo} update Object with new values to update
  **/
-module.exports.updateToDo = async function (toDoId, update) {
+export const updateToDo = async (toDoId: number, update: Update) => {
 	if (!toDoId) throw new Error('Invalid or missing argument: toDoId')
 	const toDo = await knex('to_dos').where('id', toDoId)
 	if (!toDo.length) throw new Error('invalid parameter: toDoId')

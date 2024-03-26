@@ -1,5 +1,7 @@
-const router = require('express').Router()
-const controller = require('../controllers/lists.controller')
+import express, { Router } from 'express'
+import { listsController as controller } from '../controllers'
+
+const router: Router = express.Router()
 
 router.get('/', controller.lists)
 
@@ -11,4 +13,4 @@ router.delete('/:listId', controller.deleteList)
 
 router.put('/:listId', controller.updateList)
 
-module.exports = router
+export default router

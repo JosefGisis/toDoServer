@@ -1,16 +1,17 @@
-const JWTstrategy = require('passport-jwt').Strategy
-const ExtractJWT = require('passport-jwt').ExtractJwt
-const database = require('../../../services/database')
-const passport = require('passport')
-require('dotenv').config()
+import { Strategy, ExtractJwt } from 'passport-jwt'
+import database from '../../../services/database'
+import passport from 'passport'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const options = {
 	secretOrKey: process.env.JWT_KEY,
-	jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 }
 
 passport.use(
-	new JWTstrategy(options, async (jwt_payload, done) => {
+	new Strategy(options, async (jwt_payload, done) => {
 		try {
 			const userId = jwt_payload.id
 			const user = await database.usersDB.getUser({ userId })
@@ -26,4 +27,4 @@ module.exports.authenticate = function () {
 	return passport.authenticate('jwt', { session: false })
 }
 
-module.exports.passport = passport
+export { passport }

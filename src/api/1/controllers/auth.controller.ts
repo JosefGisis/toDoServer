@@ -1,11 +1,12 @@
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
-const database = require('../../../services/database')
+import database from '../../../services/database'
+import { RouteHandler } from '../../../types/express'
 
 const saltRounds = 10
 
-module.exports.login = async function (req, res, next) {
+export const login: RouteHandler = async (req, res, next) => {
 	try {
 		const { username, password } = req.body
 		if (!username || !password) return res.status(400).json({ message: 'missing params: username and password required' })
@@ -26,7 +27,7 @@ module.exports.login = async function (req, res, next) {
 	}
 }
 
-module.exports.register = async function (req, res, next) {
+export const register: RouteHandler = async (req, res, next) => {
 	try {
 		const { username, email, password } = req.body
 		if (!username || !email || !password) return res.status(400).json({ message: 'missing parameters: username/email/password' })

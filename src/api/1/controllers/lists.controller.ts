@@ -1,6 +1,8 @@
-const { listsDB } = require('../../../services/database/index')
+import { RouteHandler } from "../../../types/express"
 
-module.exports.lists = async function (req, res, next) {
+import { listsDB } from '../../../services/database/index'
+
+export const lists: RouteHandler = async (req, res, next) => {
 	try {
 		const { user } = req
 		const lists = await listsDB.getLists({ userId: user.id })
@@ -10,7 +12,7 @@ module.exports.lists = async function (req, res, next) {
 	}
 }
 
-module.exports.list = async function (req, res, next) {
+export const list: RouteHandler = async (req, res, next) => {
 	try {
 		const list = await listsDB.getList({ listId: req.params.listId })
 		if (!list) return res.status(404).json({ message: 'list not found' })
@@ -20,7 +22,7 @@ module.exports.list = async function (req, res, next) {
 	}
 }
 
-module.exports.deleteList = async function (req, res, next) {
+export const deleteList: RouteHandler = async (req, res, next) => {
 	try {
 		const quantityDeleted = await listsDB.deleteList({ listId: req.params.listId })
 		res.json({ message: `deleted ${quantityDeleted} list(s)` })
@@ -29,7 +31,7 @@ module.exports.deleteList = async function (req, res, next) {
 	}
 }
 
-module.exports.createList = async function (req, res, next) {
+export const createList: RouteHandler = async (req, res, next) => {
 	try {
 		const {
 			user,
@@ -44,7 +46,7 @@ module.exports.createList = async function (req, res, next) {
 	}
 }
 
-module.exports.updateList = async function (req, res, next) {
+export const updateList: RouteHandler = async function (req, res, next) {
 	try {
 		const {
 			params: { listId },

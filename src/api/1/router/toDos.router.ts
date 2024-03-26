@@ -1,5 +1,7 @@
-const router = require('express').Router()
-const controller = require('../controllers/toDos.controller')
+import express, { Router } from 'express'
+import { toDosController as controller } from '../controllers'
+
+const router: Router = express.Router()
 
 router.get('/', controller.toDos)
 
@@ -15,4 +17,4 @@ router.delete('/:toDoId', controller.deleteToDo)
 
 router.put('/:toDoId', controller.updateToDo)
 
-module.exports = router
+export default router

@@ -1,8 +1,4 @@
-/**
- * Maps to-do object to database fields
- * @param {ToDo} toDo ToDo record to create
- */
-module.exports.mapToDoToDB = function (toDo) {
+export const mapToDoToDB = (toDo: ToDo) => {
 	const { title, dueDate, membership, userId, completed } = toDo
 	const dbToDo = {}
 	/**
@@ -23,11 +19,7 @@ module.exports.mapToDoToDB = function (toDo) {
 	return dbToDo
 }
 
-/**
- * Maps list from database for api
- * @param {ToDo} toDo ToDo record to map
- */
-module.exports.mapToDoFromDB = function (toDo) {
+export const mapToDoFromDB = (toDo: ToDo) => {
 	const {
 		id,
 		title,

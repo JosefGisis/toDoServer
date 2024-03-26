@@ -12,6 +12,7 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}",
+            "preLaunchTask": "tsc: build - tsconfig.json",
             "args": ["npm", "start"]
         }
     ]

@@ -1,7 +1,8 @@
-const { toDosDB } = require('../../../services/database')
+import { toDosDB } from '../../../services/database'
+import { RouteHandler } from '../../../types/express'
 
 // Get all non-list to-dos
-module.exports.toDos = async function (req, res, next) {
+export const toDos: RouteHandler = async (req, res, next) => {
 	try {
 		const toDos = await toDosDB.getToDos({ userId: req.user.id })
 		res.json({ data: toDos })
@@ -10,7 +11,7 @@ module.exports.toDos = async function (req, res, next) {
 	}
 }
 
-module.exports.toDosByList = async function(req, res, next) {
+export const toDosByList: RouteHandler = async (req, res, next) => {
 	try {
 		const toDos = await toDosDB.getToDosByList({ membership: req.body.membership })
 		res.json({ data: toDos })
@@ -19,7 +20,7 @@ module.exports.toDosByList = async function(req, res, next) {
 	}
 }
 
-module.exports.toDo = async function (req, res, next) {
+export const toDo: RouteHandler = async (req, res, next) => {
 	try {
 		const toDo = await toDosDB.getToDo({ toDoId: req.params.toDoId })
 		res.json({ data: toDo })
@@ -28,7 +29,7 @@ module.exports.toDo = async function (req, res, next) {
 	}
 }
 
-module.exports.deleteToDo = async function (req, res, next) {
+export const deleteToDo: RouteHandler = async (req, res, next) => {
 	try {
 		const quantityDeleted = await toDosDB.deleteToDo({ toDoId: req.params.toDoId })
 		res.json({ message: `deleted ${quantityDeleted} to-do(s)` })
@@ -37,7 +38,7 @@ module.exports.deleteToDo = async function (req, res, next) {
 	}
 }
 
-module.exports.deleteToDosByList = async function (req, res, next) {
+export const deleteToDosByList: RouteHandler = async (req, res, next) => {
 	try {
 		const quantityDeleted = await toDosDB.deleteToDosByList({ membership: req.body.membership })
 		res.json({ message: `deleted ${quantityDeleted} to-do(s)` })
@@ -46,7 +47,7 @@ module.exports.deleteToDosByList = async function (req, res, next) {
 	}
 }
 
-module.exports.createToDo = async function (req, res, next) {
+export const createToDo: RouteHandler = async (req, res, next) => {
 	try {
 		/**
 		 * Only title is required in the body. userId is supplied by the request.
@@ -56,17 +57,18 @@ module.exports.createToDo = async function (req, res, next) {
 			body: { title, dueDate, membership },
 		} = req
 
-		if (!title || !userId) return res.status(400).json({ message: 'missing params: title/userId' })
-
-		const newToDo = await toDosDB.createToDo({ title, dueDate, userId, membership })
-		res.json({ message: 'new to-do posted', data: newToDo })
+		if (!title || !userId){
+			res.status(400).json({ message: 'missing params: title/userId' })
+		} else{
+			const newToDo = await toDosDB.createToDo({ title, dueDate, userId, membership })
+			 res.json({ message: 'new to-do posted', data: newToDo })
+		}
 	} catch (error) {
-		next(error)
+		 next(error)
 	}
 }
 
-
-module.exports.updateToDo = async function (req, res, next) {
+export const updateToDo: RouteHandler = async (req, res, next) => {
 	try {
 		const {
 			params: { toDoId },
