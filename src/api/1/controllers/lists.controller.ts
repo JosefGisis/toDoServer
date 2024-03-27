@@ -36,14 +36,14 @@ export const deleteList: RouteHandler = async (req, res, next) => {
 export const createList: RouteHandler = async (req, res, next) => {
 	try {
 		const {
-			user,
+			user: { id },
 			body: { title },
 		} = req
 
 		if (!title) {
 			res.status(400).json({ message: 'list title required' })
 		} else {
-			const newList = await listsDB.createList({ userId: user.id, title })
+			const newList = await listsDB.createList({ userId: id, title })
 			res.json({ message: 'new list posted', data: newList })
 		}
 	} catch (error) {

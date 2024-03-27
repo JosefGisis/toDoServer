@@ -11,13 +11,13 @@ export const getLists = async (userId: number) => {
 }
 
 // Get singular list
-export const getList = async ( listId: number ) => {
+export const getList = async ( listId: string ) => {
 	if (!listId) throw new Error('missing parameter: listId')
 	const list = await knex('lists').where('id', listId)
 	return mapListFromDB(list[0])
 }
 
-export const deleteList = async ( listId: number ) => {
+export const deleteList = async ( listId: string ) => {
 	if (!listId) throw new Error('missing parameter: listId')
 	return await knex('lists').where('id', listId).del()
 }
@@ -33,7 +33,7 @@ export const createList = async (list: List) => {
 	return mapListFromDB(newList[0])
 }
 
-export const updateList = async (listId: number, update: Update) => {
+export const updateList = async (listId: string, update: Update) => {
 	if (!listId) throw new Error('missing parameter: listId')
 
 	const dbList = mapListToDB(update)

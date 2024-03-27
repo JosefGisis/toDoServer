@@ -9,7 +9,7 @@ export const getToDos = async ( userId: number ) => {
 }
 
 // Get singular to-do
-export const getToDo = async ( toDoId: number ) => {
+export const getToDo = async ( toDoId: string ) => {
 	if (!toDoId) throw new Error('missing parameter: toDoId')
 	const toDo = await knex('to_dos').where('id', toDoId)
 	return mapToDoFromDB(toDo[0])
@@ -23,13 +23,13 @@ export const getToDosByList = async ( membership: number ) => {
 }
 
 // Delete singular to-do
-export const deleteToDo = async ({ toDoId }) => {
+export const deleteToDo = async ( toDoId: string ) => {
 	if (!toDoId) throw new Error('missing parameter: toDoId')
 	return await knex('to_dos').where('id', toDoId).del()
 }
 
 // takes a list of toDoIds and deletes them. Does not delete all unassociated to-dos
-export const deleteToDos = async ({ toDoIds }) => {
+export const deleteToDos = async ( toDoIds: number[] ) => {
 	if (!toDoIds) throw new Error('Missing parameter: toDoIds')
 	if (!Array.isArray(toDoIds)) throw new Error('Invalid parameter: toDoIds needs to be of type Array')
 	return await knex('to_dos').whereIn('id', toDoIds).del()
@@ -60,7 +60,7 @@ export const createToDo = async (toDo: ToDo) => {
  * @param {number} toDoId Id of the todo to update
  * @param {ToDo} update Object with new values to update
  **/
-export const updateToDo = async (toDoId: number, update: Update) => {
+export const updateToDo = async (toDoId: string, update: Update) => {
 	if (!toDoId) throw new Error('Invalid or missing argument: toDoId')
 	const toDo = await knex('to_dos').where('id', toDoId)
 	if (!toDo.length) throw new Error('invalid parameter: toDoId')
