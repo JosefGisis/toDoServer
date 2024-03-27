@@ -1,9 +1,8 @@
-import { Request, Response, NextFunction } from "express"
-
-interface RequestWithUserId extends Request {
-	user: {
-		id: number
+declare namespace Express {
+	export interface Request {
+		user: {
+			id: number,
+			username: string
+		}
 	}
 }
-
-export type RouteHandler = (req: RequestWithUserId, res: Response, next: NextFunction) => void | Promise<void>

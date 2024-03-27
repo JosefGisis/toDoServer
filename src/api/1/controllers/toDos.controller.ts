@@ -1,10 +1,10 @@
 import { toDosDB } from '../../../services/database'
-import { RouteHandler } from '../../../types/express'
+import { RouteHandler } from '../../../types/custom'
 
 // Get all non-list to-dos
 export const toDos: RouteHandler = async (req, res, next) => {
 	try {
-		const toDos = await toDosDB.getToDos({ userId: req.user.id })
+		const toDos = await toDosDB.getToDos(req.user.id)
 		res.json({ data: toDos })
 	} catch (error) {
 		next(error)
@@ -13,7 +13,7 @@ export const toDos: RouteHandler = async (req, res, next) => {
 
 export const toDosByList: RouteHandler = async (req, res, next) => {
 	try {
-		const toDos = await toDosDB.getToDosByList({ membership: req.body.membership })
+		const toDos = await toDosDB.getToDosByList(req.body.membership)
 		res.json({ data: toDos })
 	} catch (error) {
 		next(error)
@@ -22,7 +22,7 @@ export const toDosByList: RouteHandler = async (req, res, next) => {
 
 export const toDo: RouteHandler = async (req, res, next) => {
 	try {
-		const toDo = await toDosDB.getToDo({ toDoId: req.params.toDoId })
+		const toDo = await toDosDB.getToDo(req.params.toDoId)
 		res.json({ data: toDo })
 	} catch (error) {
 		next(error)
@@ -31,7 +31,7 @@ export const toDo: RouteHandler = async (req, res, next) => {
 
 export const deleteToDo: RouteHandler = async (req, res, next) => {
 	try {
-		const quantityDeleted = await toDosDB.deleteToDo({ toDoId: req.params.toDoId })
+		const quantityDeleted = await toDosDB.deleteToDo(req.params.toDoId)
 		res.json({ message: `deleted ${quantityDeleted} to-do(s)` })
 	} catch (error) {
 		next(error)
@@ -40,7 +40,7 @@ export const deleteToDo: RouteHandler = async (req, res, next) => {
 
 export const deleteToDosByList: RouteHandler = async (req, res, next) => {
 	try {
-		const quantityDeleted = await toDosDB.deleteToDosByList({ membership: req.body.membership })
+		const quantityDeleted = await toDosDB.deleteToDosByList(req.body.membership)
 		res.json({ message: `deleted ${quantityDeleted} to-do(s)` })
 	} catch (error) {
 		next(error)
