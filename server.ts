@@ -12,7 +12,7 @@ app.use(cors())
 app.use(morgan('short'))
 app.use('/api/1', v1)
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.log(err)
     res.status(500).json({ message: err.message })
     next() //just to remove red squiggly lines >:(

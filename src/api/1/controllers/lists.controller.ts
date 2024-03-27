@@ -14,13 +14,10 @@ export const list: RouteHandler = async (req, res, next) => {
 	try {
 		const list = await listsDB.getList(req.params.listId)
 
-		if (!list) {
-			res.status(404).json({ message: 'list not found' })
-		} else {
-			res.json({ data: list })
-		}
+		if (!list) res.status(404).json({ message: 'list not found' })
+		res.json({ data: list })
 	} catch (error) {
-		next(error)
+		return next(error)
 	}
 }
 
@@ -40,14 +37,11 @@ export const createList: RouteHandler = async (req, res, next) => {
 			body: { title },
 		} = req
 
-		if (!title) {
-			res.status(400).json({ message: 'list title required' })
-		} else {
-			const newList = await listsDB.createList({ userId: id, title })
-			res.json({ message: 'new list posted', data: newList })
-		}
+		if (!title) return res.status(400).json({ message: 'list title required' })
+		const newList = await listsDB.createList({ userId: id, title })
+		res.json({ message: 'new list posted', data: newList })
 	} catch (error) {
-		next(error)
+		return next(error)
 	}
 }
 

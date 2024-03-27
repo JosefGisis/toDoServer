@@ -22,7 +22,7 @@ export const deleteList = async ( listId: string ) => {
 	return await knex('lists').where('id', listId).del()
 }
 
-export const createList = async (list: List) => {
+export const createList = async (list: any) => {
 	const { userId, title } = list
 	if (!userId || !title) throw new Error('missing parameter: userId/title')
 
@@ -33,7 +33,7 @@ export const createList = async (list: List) => {
 	return mapListFromDB(newList[0])
 }
 
-export const updateList = async (listId: string, update: Update) => {
+export const updateList = async (listId: string, update: any) => {
 	if (!listId) throw new Error('missing parameter: listId')
 
 	const dbList = mapListToDB(update)

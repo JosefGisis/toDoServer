@@ -57,14 +57,12 @@ export const createToDo: RouteHandler = async (req, res, next) => {
 			body: { title, dueDate, membership },
 		} = req
 
-		if (!title || !userId){
-			res.status(400).json({ message: 'missing params: title/userId' })
-		} else{
-			const newToDo = await toDosDB.createToDo({ title, dueDate, userId, membership })
-			 res.json({ message: 'new to-do posted', data: newToDo })
-		}
+		if (!title || !userId) return res.status(400).json({ message: 'missing params: title/userId' })
+
+		const newToDo = await toDosDB.createToDo({ title, dueDate, userId, membership })
+		res.json({ message: 'new to-do posted', data: newToDo })
 	} catch (error) {
-		 next(error)
+		return next(error)
 	}
 }
 

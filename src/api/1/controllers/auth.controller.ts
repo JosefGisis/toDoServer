@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { RouteHandler } from '../../../types/custom'
 
+import { RouteHandler } from '../../../types/custom'
 import { usersDB } from '../../../services/database'
 
 const saltRounds = 10
@@ -23,7 +23,7 @@ export const login: RouteHandler = async (req, res, next) => {
 		const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_KEY)
 		res.json({ message: 'login successful', token })
 	} catch (error) {
-		next(error)
+		return next(error)
 	}
 }
 
@@ -43,12 +43,12 @@ export const register: RouteHandler = async (req, res, next) => {
 		// Hashes user's password
 		const hashedPassword = bcrypt.hashSync(password, saltRounds)
 
-		const newUser = await usersDB.createUser({ username, email, password: hashedPassword })
+		const newUser = await usersDB.createUser(username, email, hashedPassword)
 
 		// Create jwt for session
 		const token = jwt.sign({ id: newUser.id, username: newUser.username }, process.env.JWT_KEY)
 		res.json({ message: 'account created', token })
 	} catch (error) {
-		next(error)
+		return next(error)
 	}
 }

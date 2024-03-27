@@ -14,6 +14,7 @@ passport.use(
 	new Strategy(options, async (jwt_payload, done) => {
 		try {
 			const userId = jwt_payload.id
+			// Do I need to annotate user type. And when I pass it on, is the user important or is the jwt_payload important?
 			const user = await usersDB.getUser(userId)
 			if (!user) throw new Error('invalid user information')
 			done(null, user, jwt_payload)
