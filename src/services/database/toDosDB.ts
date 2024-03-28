@@ -1,5 +1,6 @@
 import knex from './knexConnection'
-import { mapToDoToDB, mapToDoFromDB, DBToDo, ToDBToDo } from './toDoDBMapper'
+import { mapToDoToDB, mapToDoFromDB } from './toDoDBMapper'
+import type { DBToDo, ToDBToDo } from './toDoDBMapper'
 
 // Gets all of user's to-dos
 export const getToDos = async (userId: number) => {
@@ -50,17 +51,20 @@ export const createToDo = async (toDo: ToDBToDo) => {
 	if (!userId || !title) throw new Error('missing parameter: usersId/title')
 
 	const dbToDo = mapToDoToDB(toDo)
-	const postedId: DBToDo[] = await knex('to_dos').insert({ ...dbToDo, last_modified: knex.raw('NOW()') })
+	const postedId: number[] = await knex('to_dos').insert({ ...dbToDo, last_modified: knex.raw('NOW()') })
 	const newToDo: DBToDo[] = await knex('to_dos').where('id', postedId[0])
 	return mapToDoFromDB(newToDo[0])
 }
 
 export const updateToDo = async (toDoId: string, update: ToDBToDo) => {
 	if (!toDoId) throw new Error('Invalid or missing argument: toDoId')
-	const toDo = await knex('to_dos').where('id', toDoId)
+	
+	// Check if to-do exists
+	const toDo: DBToDo[] = await knex('to_dos').where('id', toDoId)
 	if (!toDo.length) throw new Error('invalid parameter: toDoId')
 
 	const dbToDo = mapToDoToDB(update)
+	
 	await knex('to_dos')
 		.where('id', toDoId)
 		.update({ ...dbToDo, last_modified: knex.raw('NOW()') })

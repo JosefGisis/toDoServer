@@ -1,5 +1,7 @@
 import knex from './knexConnection'
-import { mapListToDB, mapListFromDB, DBList, ToDBList } from './listDBMapper'
+import { mapListToDB, mapListFromDB } from './listDBMapper'
+
+import type { DBList, ToDBList } from './listDBMapper'
 
 export const getLists = async (userId: number) => {
 	if (!userId) throw new Error('missing parameter: userId')
@@ -26,7 +28,7 @@ export const createList = async (list: ToDBList ) => {
 	if (!userId || !title) throw new Error('missing parameter: userId/title')
 
 	const dbList = mapListToDB(list)
-	const postedId = await knex('lists').insert({ ...dbList, last_modified: knex.raw('NOW()') })
+	const postedId: number[] = await knex('lists').insert({ ...dbList, last_modified: knex.raw('NOW()') })
 
 	const newList: DBList[] = await knex('lists').where('id', postedId[0])
 	return mapListFromDB(newList[0])

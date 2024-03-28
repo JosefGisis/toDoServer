@@ -1,3 +1,4 @@
+// These need to be improved
 export type ToDBList = {
 	title?: any,
 	userId?: any,
@@ -9,7 +10,7 @@ export type ToDBListOutput = {
 	user_id?: number
 }
 
-
+// takes request object parameters and formats them for use with knex
 export function mapListToDB(list: ToDBList): ToDBListOutput {
 	const { title, userId } = list
 	const dbList: ToDBListOutput = {}
@@ -20,6 +21,7 @@ export function mapListToDB(list: ToDBList): ToDBListOutput {
 	return dbList
 }
 
+// DBList list received from database
 export type DBList = {
 	id: number,
 	title: string,
@@ -29,6 +31,7 @@ export type DBList = {
 	last_modified: string | null, 
 }
 
+// ClientList changes to camel case for client
 export type ClientList = {
 	id: number,
 	title: string,
@@ -38,6 +41,7 @@ export type ClientList = {
 	lastModified: string | null, 
 }
 
+// takes list from database and formats it for use with client
 export function mapListFromDB(list: DBList): ClientList {
 	const { id, title, user_id: userId, creation_date: creationDate, last_accessed: lastAccessed, last_modified: lastModified } = list
 	return { id, title, userId, creationDate, lastAccessed, lastModified }

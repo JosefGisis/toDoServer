@@ -1,3 +1,4 @@
+// These types need to be updated
 export type ToDBToDo = {
 	title?: any,
 	dueDate?: any,
@@ -13,9 +14,9 @@ export type ToDBToDoOutput = {
 	due_date?: string,
 	membership?: number,
 	completed?: 0 | 1,
-	
 }
 
+// takes request object parameters and formats them for use with knex
 export function mapToDoToDB(toDo: ToDBToDo): ToDBToDoOutput {
 	const { title, dueDate, membership, userId, completed } = toDo
 	const dbToDo: ToDBToDoOutput = {}
@@ -37,6 +38,7 @@ export function mapToDoToDB(toDo: ToDBToDo): ToDBToDoOutput {
 	return dbToDo
 }
 
+// DBToDo ToDo received from database
 export type DBToDo = {
 	id: number,
 	title: string,
@@ -48,6 +50,7 @@ export type DBToDo = {
 	membership: number | null
 }
 
+// ClientToDo changes to camel case for client
 export type ClientToDo = {
 	id: number,
 	title: string,
@@ -59,6 +62,7 @@ export type ClientToDo = {
 	membership: number | null
 }
 
+// takes to-do from database and formats it for use with client
 export function mapToDoFromDB(toDo: DBToDo): ClientToDo {
 	const {
 		id,

@@ -8,18 +8,19 @@ const saltRounds = 10
 
 export const login: RouteHandler = async (req, res, next) => {
 	try {
-		const { username, password } = req.body
+		// Is this type declaration necessary?
+		const { username, password }: { username: string; password: string } = req.body
 		if (!username || !password) return res.status(400).json({ message: 'missing params: username and password required' })
 
 		// Check if user exists
-		const user = await usersDB.getUser(username)
+		const user = await usersDB.getUser(null, username)
 		if (!user) return res.status(401).json({ message: 'invalid username or password' })
 
 		// Check if password is correct
 		const validPassword = await bcrypt.compare(password, user.password)
 		if (!validPassword) return res.status(401).json({ message: 'invalid username or password' })
 
-		// Create jwt for session
+		// Create jwt token for session
 		const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_KEY)
 		res.json({ message: 'login successful', token })
 	} catch (error) {
@@ -29,7 +30,7 @@ export const login: RouteHandler = async (req, res, next) => {
 
 export const register: RouteHandler = async (req, res, next) => {
 	try {
-		const { username, email, password } = req.body
+		const { username, email, password }: { username: string; email: string; password: string } = req.body
 		if (!username || !email || !password) return res.status(400).json({ message: 'missing parameters: username/email/password' })
 
 		// Check if username is taken

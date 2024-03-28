@@ -1,7 +1,8 @@
 import { Strategy, ExtractJwt } from 'passport-jwt'
-import { usersDB } from '../../../services/database'
 import passport from 'passport'
 import dotenv from 'dotenv'
+
+import { usersDB } from '../../../services/database'
 
 dotenv.config()
 
@@ -13,10 +14,10 @@ const options = {
 passport.use(
 	new Strategy(options, async (jwt_payload, done) => {
 		try {
-			const userId = jwt_payload.id
-			// Do I need to annotate user type. And when I pass it on, is the user important or is the jwt_payload important?
+			const userId: number = jwt_payload.id
 			const user = await usersDB.getUser(userId)
 			if (!user) throw new Error('invalid user information')
+			// user passes on ClientUser as user in req
 			done(null, user, jwt_payload)
 		} catch (error) {
 			done(error, null)
