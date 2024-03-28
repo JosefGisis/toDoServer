@@ -49,10 +49,10 @@ export const updateList: RouteHandler = async function (req, res, next) {
 	try {
 		const {
 			params: { listId },
-			body: { title },
+			body: { title, userId },
 		} = req
 
-		const updatedList = await listsDB.updateList(listId, { title })
+		const updatedList = await listsDB.updateList(listId, { title, userId })
 		res.json({ message: 'list updated', data: updatedList })
 	} catch (error) {
 		next(error)

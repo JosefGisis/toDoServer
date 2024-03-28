@@ -54,12 +54,12 @@ export const createToDo: RouteHandler = async (req, res, next) => {
 		 */
 		const {
 			user: { id: userId },
-			body: { title, dueDate, membership },
+			body: { title, dueDate, membership, completed },
 		} = req
 
 		if (!title || !userId) return res.status(400).json({ message: 'missing params: title/userId' })
 
-		const newToDo = await toDosDB.createToDo({ title, dueDate, userId, membership })
+		const newToDo = await toDosDB.createToDo({ title, dueDate, userId, membership, completed })
 		res.json({ message: 'new to-do posted', data: newToDo })
 	} catch (error) {
 		return next(error)
@@ -70,13 +70,13 @@ export const updateToDo: RouteHandler = async (req, res, next) => {
 	try {
 		const {
 			params: { toDoId },
-			body: { title, dueDate, completed, membership },
+			body: { title, dueDate, completed, membership, userId },
 		} = req
 
 		/**
 		 * UpdateToDo takes to-do's id and Update object containing update properties
 		 */
-		const updatedToDo = await toDosDB.updateToDo(toDoId, { title, dueDate, completed, membership })
+		const updatedToDo = await toDosDB.updateToDo(toDoId, { title, dueDate, userId, completed, membership })
 		res.send({ message: 'updated to-do', data: updatedToDo })
 	} catch (error) {
 		next(error)

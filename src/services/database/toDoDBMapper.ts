@@ -1,24 +1,25 @@
 // These types need to be updated
 export type ToDBToDo = {
-	title?: any,
-	dueDate?: any,
-	membership?: any,
-	userId?: any,
-	completed?: any
+	title: string | null | undefined
+	dueDate: string | null | undefined
+	membership: number | null | undefined 
+	userId: number | null | undefined
+	completed: boolean
 }
 
 export type ToDBToDoOutput = { 
 	id?:number
 	title?: string
 	user_id?: number,
-	due_date?: string,
-	membership?: number,
+	due_date?: string | null,
+	membership?: number | null,
 	completed?: 0 | 1,
 }
 
 // takes request object parameters and formats them for use with knex
 export function mapToDoToDB(toDo: ToDBToDo): ToDBToDoOutput {
 	const { title, dueDate, membership, userId, completed } = toDo
+	
 	const dbToDo: ToDBToDoOutput = {}
 	/**
 	 * Mapper cannot pass an empty property as it clears db record values.
@@ -27,12 +28,15 @@ export function mapToDoToDB(toDo: ToDBToDo): ToDBToDoOutput {
 	 */
 	if (title) dbToDo.title = title
 	if (userId) dbToDo.user_id = userId
+	
 	// Client passes null to two following expressions to remove dueDate or membership
 	if (dueDate || dueDate === null) dbToDo.due_date = dueDate
 	if (membership || membership === null) dbToDo.membership = membership
+	
 	// Requires a strict true or false value.
 	if (completed === true) dbToDo.completed = 1
 	if (completed === false) dbToDo.completed = 0
+	
 	// Alternative method for checking completed status. Checks for truthy or falsy
 	// if (completed !== null || completed !== undefined) dbToDo.completed = completed
 	return dbToDo
