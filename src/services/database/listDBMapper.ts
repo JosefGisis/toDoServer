@@ -1,21 +1,22 @@
-type ToDBList = {
-	title: any,
-	userId: any,
+export type ToDBList = {
+	title?: any,
+	userId?: any,
 }
 
-type ToDBListOutput = { 
+export type ToDBListOutput = { 
 	id?:number
 	title?: string
 	user_id?: number
 }
 
-function mapListToDB(list: ToDBList): ToDBListOutput {
+
+export function mapListToDB(list: ToDBList): ToDBListOutput {
 	const { title, userId } = list
 	const dbList: ToDBListOutput = {}
-
+	
 	if (title) dbList.title = title
 	if (userId) dbList.user_id = userId
-
+	
 	return dbList
 }
 
@@ -28,7 +29,7 @@ export type DBList = {
 	last_modified: string | null, 
 }
 
-export type List = {
+export type ClientList = {
 	id: number,
 	title: string,
 	userId: number | null,
@@ -37,10 +38,7 @@ export type List = {
 	lastModified: string | null, 
 }
 
-
-function mapListFromDB(list: DBList):List{
+export function mapListFromDB(list: DBList): ClientList {
 	const { id, title, user_id: userId, creation_date: creationDate, last_accessed: lastAccessed, last_modified: lastModified } = list
-	return { id, title, userId, creationDate, lastAccessed, lastModified } 
+	return { id, title, userId, creationDate, lastAccessed, lastModified }
 }
-
-export { mapListToDB, mapListFromDB }

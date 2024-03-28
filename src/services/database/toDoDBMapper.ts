@@ -1,6 +1,24 @@
-export const mapToDoToDB = (toDo: ToDo) => {
+export type ToDBToDo = {
+	title?: any,
+	dueDate?: any,
+	membership?: any,
+	userId?: any,
+	completed?: any
+}
+
+export type ToDBToDoOutput = { 
+	id?:number
+	title?: string
+	user_id?: number,
+	due_date?: string,
+	membership?: number,
+	completed?: 0 | 1,
+	
+}
+
+export function mapToDoToDB(toDo: ToDBToDo): ToDBToDoOutput {
 	const { title, dueDate, membership, userId, completed } = toDo
-	const dbToDo = {}
+	const dbToDo: ToDBToDoOutput = {}
 	/**
 	 * Mapper cannot pass an empty property as it clears db record values.
 	 * Mapper checks if valid arguments are present before adding to dbToDo object.
@@ -19,7 +37,29 @@ export const mapToDoToDB = (toDo: ToDo) => {
 	return dbToDo
 }
 
-export const mapToDoFromDB = (toDo: ToDo) => {
+export type DBToDo = {
+	id: number,
+	title: string,
+	completed: 0 | 1, 
+	creation_date: string | null,
+	last_modified: string | null, 
+	user_id: number | null,
+	due_date: string | null,
+	membership: number | null
+}
+
+export type ClientToDo = {
+	id: number,
+	title: string,
+	completed: boolean, 
+	creationDate: string | null,
+	lastModified: string | null, 
+	userId: number | null,
+	dueDate: string | null,
+	membership: number | null
+}
+
+export function mapToDoFromDB(toDo: DBToDo): ClientToDo {
 	const {
 		id,
 		title,

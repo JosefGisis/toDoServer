@@ -1,9 +1,20 @@
-/**
- * Maps user object from database for api
- * @param {User} user user record to map from database
- */
+export type DBUser = {
+	id: number
+	username: string
+	email: string
+	password: string
+	creation_date: string | null
+}
 
-export const mapUserFromDB = (user: User) => {
+export type ClientUser = {
+	id: number
+	username: string
+	email: string
+	password: string
+	creationDate: string | null
+}
+
+export const mapUserFromDB = (user: DBUser): ClientUser => {
 	const { id, username, email, password, creation_date: creationDate } = user
 	return { id, username, email, password, creationDate }
 }
