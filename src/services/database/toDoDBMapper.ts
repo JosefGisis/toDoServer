@@ -4,7 +4,7 @@ export type ToDBToDo = {
 	dueDate: string | null | undefined
 	membership: number | null | undefined 
 	userId: number | null | undefined
-	completed: boolean
+	completed: boolean | null | undefined
 }
 
 export type ToDBToDoOutput = { 
