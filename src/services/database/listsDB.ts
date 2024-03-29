@@ -7,8 +7,7 @@ export const getLists = async (userId: number) => {
 	if (!userId) throw new Error('missing parameter: userId')
 	const lists: DBList[] = await knex('lists').where('user_id', userId)
 
-	// if lists is an empty array, we will get a destructuring error
-	if (!lists.length) throw new Error('Error getting lists. Possible incorrect user id')
+	if (!lists.length) return []
 	return lists.map(mapListFromDB)
 }
 

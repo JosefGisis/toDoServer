@@ -8,8 +8,7 @@ export const getToDos = async (userId: number) => {
 
 	const toDos: DBToDo[] = await knex('to_dos').where('user_id', userId)
 
-	// if toDos is an empty array, attempting to map to client will cause a destructuring error
-	if (!toDos.length) throw new Error('Error getting to-dos. Check user id')
+	if (!toDos.length) return []
 	return toDos.map(mapToDoFromDB)
 }
 
@@ -29,7 +28,7 @@ export const getToDosByList = async (membership: number) => {
 
 	const toDos: DBToDo[] = await knex('to_dos').where('membership', membership)
 
-	if (!toDos.length) throw new Error('Error getting to-dos. Check to-do id list')
+	if (!toDos.length) return []
 	return toDos.map(mapToDoFromDB)
 }
 
