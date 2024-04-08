@@ -47,8 +47,8 @@ export type DBToDo = {
 	id: number,
 	title: string,
 	completed: 0 | 1, 
-	creation_date: string | null,
-	last_modified: string | null, 
+	creation_date: string,
+	last_modified: string, 
 	user_id: number | null,
 	due_date: string | null,
 	membership: number | null
@@ -59,8 +59,8 @@ export type ClientToDo = {
 	id: number,
 	title: string,
 	completed: boolean, 
-	creationDate: string | null,
-	lastModified: string | null, 
+	creationDate: string,
+	lastModified: string, 
 	userId: number | null,
 	dueDate: string | null,
 	membership: number | null

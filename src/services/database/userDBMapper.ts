@@ -3,7 +3,7 @@ export type DBUser = {
 	username: string
 	email: string
 	password: string
-	creation_date: string | null
+	creation_date: string
 }
 
 export type ClientUser = {
@@ -11,7 +11,7 @@ export type ClientUser = {
 	username: string
 	email: string
 	password: string
-	creationDate: string | null
+	creationDate: string
 }
 
 export const mapUserFromDB = (user: DBUser): ClientUser => {
