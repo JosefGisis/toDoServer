@@ -22,7 +22,7 @@ export const login: RouteHandler = async (req, res, next) => {
 
 		// Create jwt token for session
 		const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_KEY)
-		res.json({ message: 'login successful', token })
+		res.json({ token })
 	} catch (error) {
 		return next(error)
 	}
@@ -48,7 +48,7 @@ export const register: RouteHandler = async (req, res, next) => {
 
 		// Create jwt for session
 		const token = jwt.sign({ id: newUser.id, username: newUser.username }, process.env.JWT_KEY)
-		res.json({ message: 'account created', token })
+		res.json({ token })
 	} catch (error) {
 		return next(error)
 	}
