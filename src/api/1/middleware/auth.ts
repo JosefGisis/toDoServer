@@ -17,7 +17,7 @@ passport.use(
 			const userId: number = jwt_payload.id
 			const user = await usersDB.getUser(userId)
 			if (!user) throw new Error('invalid user information')
-			// user passes on ClientUser as user in req
+			// user passes on ClientUser as user property in req
 			done(null, user, jwt_payload)
 		} catch (error) {
 			done(error, null)

@@ -1,4 +1,4 @@
-import express, { Router } from 'express'
+import express from 'express'
 
 import authRouter from './auth.router'
 import listsRouter from './lists.router'
@@ -6,6 +6,8 @@ import toDosRouter from './toDos.router'
 import profileRouter from './profile.router'
 
 import { authenticate } from '../middleware/auth'
+
+import type { Router } from 'express'
 
 const router: Router = express.Router()
 

@@ -2,7 +2,9 @@ import cors from 'cors'
 import morgan from 'morgan'
 import { passport } from './api/1/middleware/auth'
 import v1 from './api/1/router'
-import express, { Request, Response, NextFunction } from 'express'
+import express from 'express'
+
+import type { Request, Response, NextFunction } from 'express'
 
 const app = express()
 app.use(passport.initialize())

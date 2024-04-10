@@ -1,5 +1,7 @@
-import express, { Router } from 'express'
+import express form 'express'
 import { toDosController as controller } from '../controllers'
+
+import type { Router } from 'express'
 
 const router: Router = express.Router()
 
