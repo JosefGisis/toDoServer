@@ -20,13 +20,13 @@ passport.use(
 			// user passes on ClientUser as user property in req
 			done(null, user, jwt_payload)
 		} catch (error) {
-			done(error, null)
+			done(error, false)
 		}
 	})
 )
 
 export const authenticate = function () {
-	return passport.authenticate('jwt', { session: false })
+	return passport.authenticate('jwt', { session: false, failWithError: true})
 }
 
 export { passport }

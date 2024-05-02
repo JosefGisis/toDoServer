@@ -1,4 +1,4 @@
-import express form 'express'
+import express from 'express'
 import { toDosController as controller } from '../controllers'
 
 import type { Router } from 'express'
